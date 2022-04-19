@@ -1,0 +1,348 @@
+{
+  "project_info": {
+    "project_number": "1034325960788",
+    "firebase_url": "https://skrapp-c2bbd-default-rtdb.firebaseio.com",
+    "project_id": "skrapp-c2bbd",
+    "storage_bucket": "skrapp-c2bbd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034325960788:android:217555e9f11627302ee5c1",
+        "android_client_info": {
+          "package_name": "com.example.skr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1034325960788-a421qpgjn52rh2rours34nskii8dkvi7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skr",
+            "certificate_hash": "37705001b942e270975772b4b0d8ab313af44e06"
+          }
+        },
+        {
+          "client_id": "1034325960788-eemtsqgdpp9mg9cbkl22rjolme5aqh58.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skr",
+            "certificate_hash": "befa16977784c27a6c665266d9084c9dd67748cf"
+          }
+        },
+        {
+          "client_id": "1034325960788-gavasaekq98bkjln6jpc0spqoodrbng7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skr",
+            "certificate_hash": "79a9d7e4375fbc86167ddb5a1d2b7abb2c39e943"
+          }
+        },
+        {
+          "client_id": "1034325960788-hpetvjbrcp1htta1vebvp0gtgc9orsbg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skr",
+            "certificate_hash": "efc29a05f7e5ed620e4e76bcbda3055dbf3a9825"
+          }
+        },
+        {
+          "client_id": "1034325960788-l0ff55ibn02ich5pvelt4c9bfanjdat7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skr",
+            "certificate_hash": "f8edfae9247e798aad4f9d3a4d332ba21cadb43a"
+          }
+        },
+        {
+          "client_id": "1034325960788-tromd2gkdgldjsfaed2u1ilrbnnkgttv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skr",
+            "certificate_hash": "66c3390a6c6a05b78df6691762baad7042ab8d4f"
+          }
+        },
+        {
+          "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqweYQF3S_29v-D9BwxlOHYF5j-Pejs_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034325960788:android:284de838a162c81b2ee5c1",
+        "android_client_info": {
+          "package_name": "com.example.skrcustomerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1034325960788-2aimrqv5eajin0f75l8k5mjqgardf83d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skrcustomerapp",
+            "certificate_hash": "79a9d7e4375fbc86167ddb5a1d2b7abb2c39e943"
+          }
+        },
+        {
+          "client_id": "1034325960788-gbdbn37qngqjesril7jfufm22qgs3rds.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skrcustomerapp",
+            "certificate_hash": "f8edfae9247e798aad4f9d3a4d332ba21cadb43a"
+          }
+        },
+        {
+          "client_id": "1034325960788-u6373mcprl2bg5ssdk8f134chtsmnqpp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skrcustomerapp",
+            "certificate_hash": "66c3390a6c6a05b78df6691762baad7042ab8d4f"
+          }
+        },
+        {
+          "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqweYQF3S_29v-D9BwxlOHYF5j-Pejs_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034325960788:android:745efbff265896dc2ee5c1",
+        "android_client_info": {
+          "package_name": "com.suqexpress.retailer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1034325960788-192ukvp4umfm0p9494lnul667ri1gpfp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.retailer",
+            "certificate_hash": "0c8f11f8bb10e6a1ba263b6535a18f39a51bb00f"
+          }
+        },
+        {
+          "client_id": "1034325960788-83bj1s267b33cji9p9m1rmp6n6t9pa9g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.retailer",
+            "certificate_hash": "79a9d7e4375fbc86167ddb5a1d2b7abb2c39e943"
+          }
+        },
+        {
+          "client_id": "1034325960788-9qih6du5lna230r5fbjgooqrd8ek9g3p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.retailer",
+            "certificate_hash": "9eb9510ecc5dd51bb22063b513f1b71e27b9afb5"
+          }
+        },
+        {
+          "client_id": "1034325960788-b0nj8anhatd44fic9ngkhvsq1m19c3nu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.retailer",
+            "certificate_hash": "66c3390a6c6a05b78df6691762baad7042ab8d4f"
+          }
+        },
+        {
+          "client_id": "1034325960788-q16eat53634huooju7t4aka7fc3fdfbq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.retailer",
+            "certificate_hash": "f66800b73f6c7921b9348328426c6379e8d2662b"
+          }
+        },
+        {
+          "client_id": "1034325960788-t92usogpn28vh0lsdbjrir3isbl1gj26.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.retailer",
+            "certificate_hash": "f8edfae9247e798aad4f9d3a4d332ba21cadb43a"
+          }
+        },
+        {
+          "client_id": "1034325960788-tjij99rjjjfmr2f3s8ltlacqp4rab82s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.retailer",
+            "certificate_hash": "efc29a05f7e5ed620e4e76bcbda3055dbf3a9825"
+          }
+        },
+        {
+          "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqweYQF3S_29v-D9BwxlOHYF5j-Pejs_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034325960788:android:b573abb62ffdfe002ee5c1",
+        "android_client_info": {
+          "package_name": "com.suqexpress.salesman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1034325960788-3reeltloqfoahusr6ne7rv7n5hi0qhrp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.salesman",
+            "certificate_hash": "efc29a05f7e5ed620e4e76bcbda3055dbf3a9825"
+          }
+        },
+        {
+          "client_id": "1034325960788-d0r122eol742lmilth67e2odeh4bacpd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.salesman",
+            "certificate_hash": "66c3390a6c6a05b78df6691762baad7042ab8d4f"
+          }
+        },
+        {
+          "client_id": "1034325960788-gsvo6dn1043qs92qj4cko3qpgdg9jis9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.salesman",
+            "certificate_hash": "f8edfae9247e798aad4f9d3a4d332ba21cadb43a"
+          }
+        },
+        {
+          "client_id": "1034325960788-n43cdreqtkqdkj0pejflo3dnhtqnoos5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.salesman",
+            "certificate_hash": "d12af12a97a4cfc3d5d36e18d774e7ddf5529bd7"
+          }
+        },
+        {
+          "client_id": "1034325960788-r65l96v3b5l7s4c58arhmi1icr0jp6b2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.salesman",
+            "certificate_hash": "9eb9510ecc5dd51bb22063b513f1b71e27b9afb5"
+          }
+        },
+        {
+          "client_id": "1034325960788-ucbn78dbivbuou81pvmgbbgiamd4it51.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.salesman",
+            "certificate_hash": "79a9d7e4375fbc86167ddb5a1d2b7abb2c39e943"
+          }
+        },
+        {
+          "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqweYQF3S_29v-D9BwxlOHYF5j-Pejs_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034325960788:android:84868df5075dcee22ee5c1",
+        "android_client_info": {
+          "package_name": "com.suqexpress.track"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1034325960788-rck1lmd1dqvi16kk8evrdv5eavsi1frl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.track",
+            "certificate_hash": "9eb9510ecc5dd51bb22063b513f1b71e27b9afb5"
+          }
+        },
+        {
+          "client_id": "1034325960788-s1aspvqircqmhkmn653ugntbku1i4j8k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.suqexpress.track",
+            "certificate_hash": "f8edfae9247e798aad4f9d3a4d332ba21cadb43a"
+          }
+        },
+        {
+          "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqweYQF3S_29v-D9BwxlOHYF5j-Pejs_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
