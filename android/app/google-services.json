@@ -138,6 +138,35 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1034325960788:android:8d07ec380746d2372ee5c1",
+        "android_client_info": {
+          "package_name": "com.suqexpress.delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqweYQF3S_29v-D9BwxlOHYF5j-Pejs_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034325960788-jqj8siukt5apmsdpndr2pfbvai7l4hqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1034325960788:android:745efbff265896dc2ee5c1",
         "android_client_info": {
           "package_name": "com.suqexpress.retailer"
