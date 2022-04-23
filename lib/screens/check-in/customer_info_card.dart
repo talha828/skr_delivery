@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:skr_delivery/screens/EditShop/edit_shop.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
 import 'package:skr_delivery/screens/widget/constant.dart';
 
 class CustomerInfo extends StatelessWidget {
-  CustomerInfo({this.height,this.code,this.name,this.image});
+  CustomerInfo({this.height,this.code,this.name,this.image,this.location,this.shopDetails,this.long,this.lat});
 
   final double height;
   final code;
   final name;
   final image;
+  final location;
+  final lat;
+  final long;
+  final shopDetails;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -124,39 +129,39 @@ class CustomerInfo extends StatelessWidget {
               ),
 
             ),
-            // Expanded(
-            //   flex: 3,
-            //   child: InkWell(
-            //     // onTap: () {
-            //     //   Navigator.push(
-            //     //       context,
-            //     //       MaterialPageRoute(
-            //     //           builder: (_) => EditShopScreen(
-            //     //             lat: widget.lat,
-            //     //             long: widget.long,
-            //     //             shopData: widget.shopDetails,
-            //     //             locationdata: widget.locationdata,
-            //     //           )));
-            //     // },
-            //     child: Container(
-            //       height: height * 0.045,
-            //       decoration: BoxDecoration(
-            //           color: themeColor1 /*:Color(0xff1F92F6)*/,
-            //           borderRadius: BorderRadius.circular(5)),
-            //       child: Padding(
-            //         padding: const EdgeInsets.all(8.0),
-            //         child: Center(
-            //           child: VariableText(
-            //             text: 'Edit Shop',
-            //             fontsize: 11,
-            //             fontcolor: themeColor2,
-            //             weight: FontWeight.w700,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // )
+            Expanded(
+              flex: 3,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => EditShopScreen(
+                            lat: lat,
+                            long: long,
+                            shopData: shopDetails,
+                            locationdata: location,
+                          )));
+                },
+                child: Container(
+                  height: height * 0.045,
+                  decoration: BoxDecoration(
+                      color: themeColor1 /*:Color(0xff1F92F6)*/,
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: VariableText(
+                        text: 'Edit Shop',
+                        fontsize: 11,
+                        fontcolor: themeColor2,
+                        weight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

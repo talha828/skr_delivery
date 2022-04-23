@@ -4,7 +4,9 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:background_locator/location_dto.dart';
-import 'package:skr/ApiCode/broadcast.dart';
+import 'package:provider/provider.dart';
+import 'package:skr_delivery/locationServices/broadcast.dart';
+import 'package:skr_delivery/model/user_model.dart';
 
 import 'file_manager.dart';
 
@@ -18,17 +20,23 @@ class LocationServiceRepository {
   }
 
   static const String isolateName = 'LocatorIsolate';
-  static String userNumber;
+  static String userNumber ;
   static String userName;
+
   int _count = -1;
 
   Future<void> init(Map<dynamic, dynamic> params) async {
     //TODO change logs
     print("***********Init callback handler");
     if(params.containsKey('userNumber')){
+
       userName = params['userName'];
-      userNumber = params['userNumber'];
-      print("#############: " + userNumber);
+
+      // userName = "google";
+      // // params['userName'];
+      // userNumber = "+921234567890";
+      // // params['userNumber'];
+      print("#############: " + userName);
     }
     if (params.containsKey('countInit')) {
       dynamic tmpCount = params['countInit'];
@@ -61,10 +69,12 @@ class LocationServiceRepository {
   Future<void> callback(LocationDto locationDto) async {
     //await FileManager.clearLogFile();
     print(DateTime.now().hour.toString());
+    UserModel obj=UserModel();
+
     // if(DateTime.now().hour > 9 && DateTime.now().hour < 21  ){
       print('$_count location: ${locationDto.latitude.toString()} ${locationDto.longitude.toString()}');
-      LocationBroadcast.broadcastLocation(locationDto.latitude,locationDto.longitude, userNumber, userName);
-      print("Contact: " +userNumber.toString());
+      LocationBroadcast.broadcastLocation(locationDto.latitude,locationDto.longitude,);
+      print("Contact: " +userName.toString());
       await setLogPosition(_count, locationDto);
       final SendPort send = IsolateNameServer.lookupPortByName(isolateName);
       send?.send(locationDto);

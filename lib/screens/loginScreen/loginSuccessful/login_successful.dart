@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skr_delivery/ApiCode/online_database.dart';
+import 'package:skr_delivery/model/user_model.dart';
 import 'package:skr_delivery/screens/main_screen/main_screen.dart';
 
 import '../../widget/constant.dart';
 
 class LoginSuccessful extends StatelessWidget {
+  final password;
+  LoginSuccessful({this.password});
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: themeColor1,
-        onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen())),
+        onPressed: ()async{
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          var userCellNumber = Provider.of<UserModel>(context, listen: false).phoneNumber;
+          var  userName = Provider.of<UserModel>(context, listen: false).userName;
+          prefs.setString('phoneno', userCellNumber.toString());
+          prefs.setString('name',userName.toString());
+          prefs.setString('password',password.toString());
+          phoneNumber=prefs.getString('phoneno');
+          phonepass=prefs.getString('password');
+
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));
+        },
         label: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

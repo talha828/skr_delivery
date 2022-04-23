@@ -10,9 +10,10 @@ import 'package:skr_delivery/screens/main_screen/main_screen.dart';
 import '../../widget/constant.dart';
 
 class PinCodeScreen extends StatefulWidget {
-  PinCodeScreen({this.phoneNo,this.verificationId});
+  PinCodeScreen({this.phoneNo,this.verificationId,this.password});
   final phoneNo;
   final verificationId;
+  final password;
   @override
   State<PinCodeScreen> createState() => _PinCodeScreenState();
 }
@@ -74,7 +75,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                 controller: controller,
                 onCompleted: (value) {
                   var _credential = PhoneAuthProvider.credential(verificationId: widget.verificationId, smsCode: controller.text.toString());
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginSuccessful()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginSuccessful(password: widget.password.toString(),)));
                   print("Completed");
 
                 },

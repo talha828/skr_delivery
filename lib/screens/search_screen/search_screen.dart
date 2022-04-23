@@ -1,6 +1,4 @@
-import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
-
 import 'package:skr_delivery/model/customerModel.dart';
 import 'package:skr_delivery/screens/main_screen/main_screen_card.dart';
 import 'package:skr_delivery/screens/main_screen/main_search_field.dart';
@@ -61,7 +59,8 @@ class _SearchScreenState extends State<SearchScreen> {
             dues: item.dues,
             outStanding: item.outStanding,
             customerinfo: item.customerinfo,
-            shopAssigned: item.shopAssigned
+            shopAssigned: item.shopAssigned,
+
         ));
 
         i++;
@@ -100,88 +99,95 @@ class _SearchScreenState extends State<SearchScreen> {
           weight: FontWeight.w600,
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: height * 0.025,
-          ),
-          MainSearchField(
-            controller: _controller,
-            onchange: searchOperation,
+      body: Container(
+        child: Column(
+          children: [
+            SizedBox(
+              height: height * 0.025,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: MainSearchField(
+                controller: _controller,
+                onchange: searchOperation,
 
-          ),
-          SizedBox(
-            height: height * 0.03,
-          ),
-          customersearchresult.length != 0 || _controller.text.isNotEmpty
-              ? Expanded(
-            child: NotificationListener<ScrollNotification>(
-                onNotification: (scrollNotification) {
-                  if (_scrollController.position.pixels ==
-                      _scrollController.position.maxScrollExtent) {
-                    //  double temp=0.01;
-                    setState(() {
-                      if (listLength + 1 < customersearchresult.length) {
-                        listLength += 1;
-                      } else {
-                        int temp =
-                            customersearchresult.length - listLength;
-                        listLength = listLength + temp;
-                      }
-                    });
-                    //print('temp value is'+listLength.toString());
-                  }
-                  if (_scrollController.position.pixels ==
-                      _scrollController.position.minScrollExtent) {
-                    //  print('start scroll');
-                  }
-                  return false;
-                },
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  controller: _scrollController,
-                  itemCount: customersearchresult.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15),
-                      child: Column(
-                        children: [
-                          MainScreenCards(
-                            height: height,
-                            width: width,
-                            f: f,
-                            menuButton: menuButton,
-                            code: customersearchresult[index].customerCode.toString(),
-                            category: customersearchresult[index].customerCategory.toString(),
-                            shopName: customersearchresult[index].customerShopName.toString(),
-                            address: customersearchresult[index].customerAddress.toString(),
-                            name: customersearchresult[index].customerContactPersonName.toString(),
-                            phoneNo: customersearchresult[index].customerContactNumber.toString(),
-                            lastVisit: customersearchresult[index].lastVisitDay.toString(),
-                            dues: customersearchresult[index].dues.toString(),
-                            lastTrans: customersearchresult[index].lastTransDay.toString(),
-                            outstanding: customersearchresult[index].outStanding.toString(),
-                            shopAssigned: customersearchresult[index].shopAssigned,
-                            lat: customersearchresult[index].customerLatitude,
-                            long: customersearchresult[index].customerLongitude,
-                            showLoading: (value) {
-                              setState(() {
-                                isLoading = value;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            height: height * 0.025,
-                          ),
-                        ],
-                      ),
-                    );
+              ),
+            ),
+            SizedBox(
+              height: height * 0.03,
+            ),
+            customersearchresult.length != 0 || _controller.text.isNotEmpty
+                ? Expanded(
+              child: NotificationListener<ScrollNotification>(
+                  onNotification: (scrollNotification) {
+                    if (_scrollController.position.pixels ==
+                        _scrollController.position.maxScrollExtent) {
+                      //  double temp=0.01;
+                      setState(() {
+                        if (listLength + 1 < customersearchresult.length) {
+                          listLength += 1;
+                        } else {
+                          int temp =
+                              customersearchresult.length - listLength;
+                          listLength = listLength + temp;
+                        }
+                      });
+                      //print('temp value is'+listLength.toString());
+                    }
+                    if (_scrollController.position.pixels ==
+                        _scrollController.position.minScrollExtent) {
+                      //  print('start scroll');
+                    }
+                    return false;
                   },
-                )),
-          )
-              : Container(),
-        ],
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    controller: _scrollController,
+                    itemCount: customersearchresult.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15),
+                        child: Column(
+                          children: [
+                            MainScreenCards(
+                              height: height,
+                              width: width,
+                              f: f,
+                              menuButton: menuButton,
+                              code: customersearchresult[index].customerCode.toString(),
+                              category: customersearchresult[index].customerCategory.toString(),
+                              shopName: customersearchresult[index].customerShopName.toString(),
+                              address: customersearchresult[index].customerAddress.toString(),
+                              name: customersearchresult[index].customerContactPersonName.toString(),
+                              phoneNo: customersearchresult[index].customerContactNumber.toString(),
+                              lastVisit: customersearchresult[index].lastVisitDay.toString(),
+                              dues: customersearchresult[index].dues.toString(),
+                              lastTrans: customersearchresult[index].lastTransDay.toString(),
+                              outstanding: customersearchresult[index].outStanding.toString(),
+                              shopAssigned: customersearchresult[index].shopAssigned,
+                              lat: customersearchresult[index].customerLatitude,
+                              long: customersearchresult[index].customerLongitude,
+                              image: "",
+                              customerData: widget.customerModel[index],
+                              showLoading: (value) {
+                                setState(() {
+                                  isLoading = value;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              height: height * 0.025,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )),
+            )
+                : Container(),
+          ],
+        ),
       ),
     );
   }

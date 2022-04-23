@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:map_launcher/map_launcher.dart';
+import 'package:provider/provider.dart';
+import 'package:skr_delivery/model/retrun_cart_model.dart';
 import 'package:skr_delivery/screens/check-in/checkin_screen.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +28,7 @@ class MainScreenCards extends StatefulWidget {
     this.long,
     this.showLoading,
     this.image,
+    this.customerData,
   });
 
   final image;
@@ -46,6 +49,7 @@ class MainScreenCards extends StatefulWidget {
   final shopAssigned;
   final lat;
   final long;
+  final customerData;
   Function showLoading;
 
   @override
@@ -463,7 +467,8 @@ class _MainScreenCardsState extends State<MainScreenCards> {
                             //     long: templong.toString(),
                             //     customerData: widget.customerData);
                                 if (widget.shopAssigned=="Yes"){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckIn(code: widget.code,name: widget.shopName,image: widget.image,)));
+                                  Provider.of<RetrunCartModel>(context, listen: false).retruncreateCart();
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckIn(code: widget.code,name: widget.shopName,image: widget.image,customerData:widget.customerData,)));
                                 }
                                 else{
                                   Fluttertoast.showToast(

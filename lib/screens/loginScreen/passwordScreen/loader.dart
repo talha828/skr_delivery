@@ -4,9 +4,7 @@ import '../../widget/constant.dart';
 
 
 class loader extends StatelessWidget {
-  const loader({
-    Key key,
-  }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {

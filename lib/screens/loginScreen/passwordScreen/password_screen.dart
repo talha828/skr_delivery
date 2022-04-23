@@ -1,11 +1,13 @@
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:skr_delivery/online_auth.dart';
+import 'package:skr_delivery/model/user_model.dart';
+import 'package:skr_delivery/ApiCode/online_auth.dart';
 import 'package:skr_delivery/screens/loginScreen/pinCodeScreen/pincode_screen.dart';
 import 'package:skr_delivery/screens/main_screen/main_screen.dart';
-
 import '../../widget/constant.dart';
 import 'loader.dart';
 
@@ -22,8 +24,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
   bool loading=false;
   TextEditingController controller = TextEditingController();
 
-  verifyPhoneNo()async{
-    FirebaseAuth _auth=await FirebaseAuth.instance;
+  verifyPhoneNo(var data)async{
+    FirebaseAuth _auth= FirebaseAuth.instance;
     _auth.verifyPhoneNumber(
         phoneNumber: widget.phoneNumber.toString(),
         verificationCompleted: (credential){
@@ -52,13 +54,18 @@ class _PasswordScreenState extends State<PasswordScreen> {
           print(authException.message);
           print('auth fail error');
         },
-        codeSent: (String verificationId, [int forceResendingToken]){
+        codeSent: (String verificationId, [int forceResendingToken])async{
           //show dialog to take input from the user
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => PinCodeScreen(phoneNo: widget.phoneNumber,verificationId: verificationId,)
-          );
+          // Provider.of<UserModel>(context,listen: false).userSignIn(data);
+          // showDialog(
+          //     context: context,
+          //     barrierDismissible: false,
+          //     builder: (context) => PinCodeScreen(phoneNo: widget.phoneNumber,verificationId: verificationId,)
+          // );
+          Provider.of<UserModel>(context,listen: false).userSignIn(data);
+          Navigator.push(
+              context, MaterialPageRoute(builder:(context)=> PinCodeScreen(password: controller.text, phoneNo: widget.phoneNumber,verificationId: verificationId,)));
+
         },
         codeAutoRetrievalTimeout:(String verificationId){
           verificationId = verificationId;
@@ -75,7 +82,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
       var response = await Auth.signIn2(widget.phoneNumber, controller.text);
       if(response.statusCode==200){
         //TODO got model extract data
-        verifyPhoneNo();
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        verifyPhoneNo(data);
       }
       else if(response.statusCode==401){
         Alert(

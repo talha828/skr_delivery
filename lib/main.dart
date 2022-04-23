@@ -1,7 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:skr_delivery/splash_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:skr_delivery/screens/splash_screen/splash_screen.dart';
+import 'package:skr_delivery/trmpFile.dart';
+
+import 'model/cart_model.dart';
+import 'model/retrun_cart_model.dart';
+import 'model/user_model.dart';
 
 
 
@@ -13,21 +19,34 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.red));
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Skr App',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserModel>(
+          create: (_) => UserModel(),
+        ),
+        ChangeNotifierProvider<CartModel>(
+          create: (_) => CartModel(),
+        ),
+        ChangeNotifierProvider<RetrunCartModel>(create: (_) => RetrunCartModel()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Skr App',
+        theme: ThemeData(
+          primarySwatch: Colors.red,
+        ),
+        home: SplashScreen(),
+        //home: NoInterNetConnection(),
+        // home: Temp(),
+        // home:AgingScreen()
+        //home: MainMenuScreen(),
       ),
-      //home: NoInterNetConnection(),
-      home: SplashScreen(),
-      // home:AgingScreen()
-      //home: MainMenuScreen(),
     );
   }
 }
