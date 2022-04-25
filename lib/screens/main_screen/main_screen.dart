@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
@@ -9,16 +10,21 @@ import 'package:background_locator/settings/ios_settings.dart';
 import 'package:background_locator/settings/locator_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skr_delivery/ApiCode/online_database.dart';
 import 'package:skr_delivery/locationServices/broadcast.dart';
 import 'package:skr_delivery/locationServices/location_callback_handler.dart';
 import 'package:skr_delivery/locationServices/location_service_repository.dart';
 import 'package:skr_delivery/model/user_model.dart';
+import 'package:skr_delivery/screens/loginScreen/phonenumber/phonenumber.dart';
+import 'package:skr_delivery/screens/splash_screen/splash_screen.dart';
+import 'package:skr_delivery/screens/widget/common.dart';
+import 'package:skr_delivery/screens/widget/constant.dart';
 import 'all_shop.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart' as loc;
-
-
 
 class MainScreen extends StatefulWidget {
   @override
@@ -171,16 +177,21 @@ class _MainScreenState extends State<MainScreen> {
 
   static const String _isolateName = "LocatorIsolate";
   ReceivePort port = ReceivePort();
-  Future<void> startLocationService() async{
-
-    var userCellNumber = Provider.of<UserModel>(context, listen: false).phoneNumber;
-    var  userName = Provider.of<UserModel>(context, listen: false).userName;
+  Future<void> startLocationService() async {
+    var userCellNumber =
+        Provider.of<UserModel>(context, listen: false).phoneNumber;
+    var userName = Provider.of<UserModel>(context, listen: false).userName;
 
     await BackgroundLocator.initialize();
-    Map<String, dynamic> data = {'countInit': 1, 'userNumber': userCellNumber,'userName': userName};
+    Map<String, dynamic> data = {
+      'countInit': 1,
+      'userNumber': userCellNumber,
+      'userName': userName
+    };
     print(userCellNumber);
     print(userName);
-     return await BackgroundLocator.registerLocationUpdate(LocationCallbackHandler.callback,
+    return await BackgroundLocator.registerLocationUpdate(
+        LocationCallbackHandler.callback,
         initCallback: LocationCallbackHandler.initCallback,
         initDataCallback: data,
         disposeCallback: LocationCallbackHandler.disposeCallback,
@@ -196,12 +207,13 @@ class _MainScreenState extends State<MainScreen> {
                 notificationTitle: 'Start Location Tracking',
                 notificationMsg: 'Track location in background',
                 notificationBigMsg:
-                'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
+                    'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
                 notificationIcon: '',
                 notificationIconColor: Colors.grey,
                 notificationTapCallback:
-                LocationCallbackHandler.notificationCallback)));
+                    LocationCallbackHandler.notificationCallback)));
   }
+
   // On back
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -229,6 +241,7 @@ class _MainScreenState extends State<MainScreen> {
         )) ??
         false;
   }
+
   // getLocation()async{
   //   bg.BackgroundGeolocation.onLocation((bg.Location location) {
   //     print('[location] - ${location.coords.latitude}');
@@ -249,11 +262,24 @@ class _MainScreenState extends State<MainScreen> {
   //     }
   //   });
   // }
+  getWalletStatus() async {
+    var response2 = await OnlineDataBase.getWalletStatus();
+    if (response2.statusCode == 200) {
+      var data2 = jsonDecode(utf8.decode(response2.bodyBytes));
+      print("get wallet data is: " + data2.toString());
+      Provider.of<UserModel>(context, listen: false).getWalletStatus(data2);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Something Went Wrong", toastLength: Toast.LENGTH_LONG);
+    }
+    setState(() {});
+  }
+
   @override
   void initState() {
     // getLocation();
     startLocationService();
-
+    getWalletStatus();
     super.initState();
   }
   // onPort(dynamic data) async {
@@ -381,13 +407,174 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    final userData = Provider.of<UserModel>(context, listen: true);
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
           body: DefaultTabController(
         length: 2,
         child: Scaffold(
-          drawer: Drawer(),
+          drawer: Drawer(
+            child: Column(
+              children: <Widget>[
+                DrawerHeader(
+                    child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/icons/profilepic.png',
+                            scale: 3,
+                          ),
+                          Spacer(),
+                          Image.asset('assets/icons/splashlogo.png', scale: 8.5)
+                        ],
+                      ),
+                      SizedBox(
+                        height: height * 0.01,
+                      ),
+                      VariableText(
+                        text: userData.userName.toString(),
+                        fontsize: 16,
+                        weight: FontWeight.w500,
+                      ),
+                      SizedBox(
+                        height: height * 0.0055,
+                      ),
+                      VariableText(
+                        text: userData.email.toString(),
+                        fontsize: 12,
+                        weight: FontWeight.w400,
+                      ),
+                      SizedBox(
+                        height: height * 0.0055,
+                      ),
+                      VariableText(
+                        text: "Limit: " +
+                            userData.usercashReceive.toString() +
+                            ' / ' +
+                            userData.usercashLimit.toString(),
+                        fontsize: 12,
+                        weight: FontWeight.w400,
+                      ),
+                    ],
+                  ),
+                )),
+                DrawerList(
+                  text: 'Home',
+                  imageSource: "assets/icons/home.png",
+                  selected: true,
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                // DrawerList(
+                //   text: 'Add Customer',
+                //   imageSource: "assets/icons/addcustomer.png",
+                //   selected: false,
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //     Navigator.push(
+                //         context,
+                //         NoAnimationRoute(
+                //             widget: AddCustomerScreen(
+                //               //locationdata: _locationData,
+                //             )));
+                //   },
+                // ),
+                // DrawerList(
+                //   text: 'Reports',
+                //   imageSource: "assets/icons/ledger.png",
+                //   selected: false,
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //     Navigator.push(
+                //         context,
+                //         NoAnimationRoute(
+                //             widget: ReportsScreen(
+                //               userdata: userData,
+                //             )));
+                //   },
+                // ),
+                // DrawerList(
+                //     text: 'Total Items',
+                //     imageSource: "assets/icons/totalitem.png",
+                //     selected: false,
+                //     onTap: () {
+                //       Navigator.of(context).pop();
+                //       Navigator.push(context,
+                //           NoAnimationRoute(widget: TotalItemScreen()));
+                //     }),
+                // DrawerList(
+                //     text: 'AGING',
+                //     imageSource: "assets/icons/aging.png",
+                //     selected: false,
+                //     onTap: () {
+                //       Navigator.of(context).pop();
+                //       Navigator.push(context,
+                //           NoAnimationRoute(widget: AgingScreen()));
+                //     }),
+                // DrawerList(
+                //     text: 'Bank Account',
+                //     imageSource: "assets/icons/bankaccount.png",
+                //     selected: false,
+                //     onTap: () {
+                //       Navigator.of(context).pop();
+                //       Navigator.push(
+                //           context,
+                //           NoAnimationRoute(
+                //               widget: BankAccountScreen(
+                //                 shopDetails: customer,
+                //                 //lat: _locationData.latitude,
+                //                 //long: _locationData.longitude,
+                //               )));
+                //     }),
+                // DrawerList(
+                //   text: 'History',
+                //   imageSource: "assets/icons/history.png",
+                //   selected: false,
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //     Navigator.push(
+                //         context, NoAnimationRoute(widget: HistoryScreen()));
+                //   },
+                // ),
+                DrawerList(
+                  text: 'Logout',
+                  imageSource: "assets/icons/logout.png",
+                  selected: false,
+                  onTap: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.remove('phoneno');
+                    prefs.remove('password');
+                    Navigator.push(
+                        context, NoAnimationRoute(widget: PhoneNumber()));
+                  },
+                ),
+                Spacer(),
+                Container(
+                  padding: EdgeInsets.only(left: 0.0, right: 0.0),
+                  color: Color(0xffFCFCFC),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: VariableText(
+                      text: "@ SKR Sales Link 2021. Version 1.0.0",
+                      fontsize: 14.5,
+                      weight: FontWeight.w400,
+                      fontcolor: textcolorgrey,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           appBar: AppBar(
             // leading: Icon(Icons.menu,color: Colors.white,),
             title: Text("Delivery App"),
@@ -426,14 +613,93 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-
-
 class ScreenTwo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Text("Two"),
+      ),
+    );
+  }
+}
+
+class DrawerList extends StatelessWidget {
+  final String text;
+  final Function onTap;
+  final String imageSource;
+  final bool selected;
+
+  const DrawerList({
+    this.imageSource,
+    this.text,
+    this.onTap,
+    this.selected = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
+    double height = media.height;
+    double width = media.width;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: onTap,
+            child: Container(
+              height: height * 0.07,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: selected ? Color(0xffFFEEE0) : Color(0xffFCFCFC)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              //alignment: Alignment.center,
+                              child: Image.asset(
+                                imageSource,
+                                scale: 2.6,
+                                color: selected ? themeColor1 : textcolorgrey,
+                              ),
+                            ),
+                          )),
+                      Expanded(
+                          flex: 5,
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10.0, left: 4),
+                              child: VariableText(
+                                text: text,
+                                textAlign: TextAlign.start,
+                                fontsize: 15,
+                                weight: FontWeight.w400,
+                                fontcolor:
+                                    selected ? themeColor1 : Color(0xFF555555),
+                              ),
+                            ),
+                          ))
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          //SizedBox(height: height*0.0055,)
+        ],
       ),
     );
   }

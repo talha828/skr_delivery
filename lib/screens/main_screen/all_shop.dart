@@ -5,8 +5,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/model.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 
 import 'package:skr_delivery/model/customerModel.dart';
+import 'package:skr_delivery/model/user_model.dart';
 import 'package:skr_delivery/screens/loginScreen/passwordScreen/loader.dart';
 import 'package:skr_delivery/screens/main_screen/locationandrefresh.dart';
 import 'package:skr_delivery/screens/main_screen/nearbyyouandviewall.dart';
@@ -17,6 +19,7 @@ import '../../ApiCode/online_database.dart';
 import 'main_screen_card.dart';
 import 'main_search_field.dart';
 import 'package:geolocator/geolocator.dart' as geo;
+
 class AllShop extends StatefulWidget {
   @override
   _AllShopState createState() => _AllShopState();
@@ -35,7 +38,7 @@ class _AllShopState extends State<AllShop> {
   List<CustomerModel> _list = [];
   List<String> menuButton = ['DIRECTIONS', 'CHECK-IN'];
   int selectedIndex = 0;
-  List imageLinks=[];
+  List imageLinks = [];
   var f = NumberFormat("###,###.0#", "en_US");
 
   // current location
@@ -71,12 +74,14 @@ class _AllShopState extends State<AllShop> {
     localArea = first.subLocality.toString();
     setState(() {});
   }
+
   // set loading
   setLoading(bool loading) {
     setState(() {
       isLoading = loading;
     });
   }
+
   // get customer
   void getAllCustomerData() async {
     try {
@@ -98,7 +103,7 @@ class _AllShopState extends State<AllShop> {
         }
         for (int i = 0; i < 4; i++) {
           print("name:${customer[i].customerName}");
-          print("data length :${customer.length}");
+          print("data length :${customer[i].dues}");
           limitedcustomer.add(CustomerModel.fromModel(data["results"][i]));
         }
         //print("length is"+limitedcustomer.length.toString());
@@ -127,6 +132,7 @@ class _AllShopState extends State<AllShop> {
           fontSize: 16.0);
     }
   }
+
   void getNearByCustomerData() async {
     try {
       runningAPI = true;
@@ -136,22 +142,27 @@ class _AllShopState extends State<AllShop> {
         nearByCustomers.clear();
         var data = jsonDecode(utf8.decode(response.bodyBytes));
         for (var item in data["results"]) {
-          if(item['LATITUDE'] != null && item['LONGITUDE'] != null &&
-              item['LATITUDE'].toString().length > 2 && item['LONGITUDE'].toString().length > 2){
-            double dist = calculateDistance(Coordinates(double.parse(item['LATITUDE'].toString()), double.parse(item['LONGITUDE'].toString())));
-            if(dist <= 2.0){
+          if (item['LATITUDE'] != null &&
+              item['LONGITUDE'] != null &&
+              item['LATITUDE'].toString().length > 2 &&
+              item['LONGITUDE'].toString().length > 2) {
+            double dist = calculateDistance(Coordinates(
+                double.parse(item['LATITUDE'].toString()),
+                double.parse(item['LONGITUDE'].toString())));
+            if (dist <= 2.0) {
               //print(dist.toString() + " KM");
-              nearByCustomers.add(CustomerModel.fromModel(item, distance: dist));
+              nearByCustomers
+                  .add(CustomerModel.fromModel(item, distance: dist));
             }
           }
           customer.add(CustomerModel.fromModel(item));
         }
-        for(int i=0; i < nearByCustomers.length-1; i++){
-          for(int j=0; j < nearByCustomers.length-i-1; j++){
-            if(nearByCustomers[j].distance > nearByCustomers[j+1].distance){
+        for (int i = 0; i < nearByCustomers.length - 1; i++) {
+          for (int j = 0; j < nearByCustomers.length - i - 1; j++) {
+            if (nearByCustomers[j].distance > nearByCustomers[j + 1].distance) {
               CustomerModel temp = nearByCustomers[j];
-              nearByCustomers[j] = nearByCustomers[j+1];
-              nearByCustomers[j+1] = temp;
+              nearByCustomers[j] = nearByCustomers[j + 1];
+              nearByCustomers[j + 1] = temp;
             }
           }
         }
@@ -179,13 +190,14 @@ class _AllShopState extends State<AllShop> {
           fontSize: 16.0);
     }
   }
+
   Coordinates userLatLng;
-  calculateDistance(Coordinates shopLatLng){
-    var distance = geo.Geolocator.distanceBetween(
-        userLatLng.latitude, userLatLng.longitude,
-        shopLatLng.latitude, shopLatLng.longitude);
-    return distance/1000;
+  calculateDistance(Coordinates shopLatLng) {
+    var distance = geo.Geolocator.distanceBetween(userLatLng.latitude,
+        userLatLng.longitude, shopLatLng.latitude, shopLatLng.longitude);
+    return distance / 1000;
   }
+
   @override
   void initState() {
     super.initState();
@@ -193,7 +205,8 @@ class _AllShopState extends State<AllShop> {
     getAllCustomerData();
     getNearByCustomerData();
   }
-  Future<void>refresh()async{
+
+  Future<void> refresh() async {
     getUserLocation();
     getAllCustomerData();
     getNearByCustomerData();
@@ -203,23 +216,21 @@ class _AllShopState extends State<AllShop> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    return Stack(
-        alignment: Alignment.center,
-        children: [
+    return Stack(alignment: Alignment.center, children: [
       Scaffold(
           body: RefreshIndicator(
-            displacement: 20,
-            onRefresh: refresh,
-            child: SingleChildScrollView(
-              child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
+        displacement: 20,
+        onRefresh: refresh,
+        child: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ShowLocationAndRefresh(
                   localArea: localArea,
                   city: city,
-                  onTap:(){
+                  onTap: () {
                     getUserLocation();
                     getAllCustomerData();
                     getNearByCustomerData();
@@ -231,61 +242,98 @@ class _AllShopState extends State<AllShop> {
                         context,
                         MaterialPageRoute(
                             builder: (_) => SearchScreen(
-                              customerModel: customer,
-                              lat: userLatLng.latitude,
-                              long: userLatLng.longitude,
-                            )));
+                                  customerModel: customer,
+                                  lat: userLatLng.latitude,
+                                  long: userLatLng.longitude,
+                                )));
                   },
-                 // enable: false,
+                  // enable: false,
                 ),
                 NearByYouAndViewAll(
-                  itemCount: nearByCustomers.length>10 ?10:nearByCustomers.length,
-                  onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewAllScreen(nearByCustomers: nearByCustomers,customerList: customer,lat: userLatLng.latitude,long: userLatLng.longitude,))),
+                  itemCount:
+                      nearByCustomers.length > 10 ? 10 : nearByCustomers.length,
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ViewAllScreen(
+                                nearByCustomers: nearByCustomers,
+                                customerList: customer,
+                                lat: userLatLng.latitude,
+                                long: userLatLng.longitude,
+                              ))),
                 ),
-               Container(
-                 child: nearByCustomers.length<10?Container(
-                   height: 380,
-                   child: Center(child: Text("No Shop Found")),
-                 ):ListView.builder(
-                   shrinkWrap: true,
-                     itemCount: 10,
-                     physics: NeverScrollableScrollPhysics(),
-                     itemBuilder:(context,index){
-                       return
-                         MainScreenCards(
-                         height: height,
-                         width: width,
-                         f: f,
-                         menuButton: menuButton,
-                         code: nearByCustomers[index].customerCode.toString(),
-                         category: nearByCustomers[index].customerCategory.toString(),
-                         shopName: nearByCustomers[index].customerShopName.toString(),
-                         address: nearByCustomers[index].customerAddress.toString(),
-                         name: nearByCustomers[index].customerContactPersonName.toString(),
-                         phoneNo: nearByCustomers[index].customerContactNumber.toString(),
-                         lastVisit: nearByCustomers[index].lastVisitDay.toString(),
-                         dues: nearByCustomers[index].dues.toString(),
-                         lastTrans: nearByCustomers[index].lastTransDay.toString(),
-                         outstanding: nearByCustomers[index].outStanding.toString(),
-                         shopAssigned: nearByCustomers[index].shopAssigned,
-                         lat: nearByCustomers[index].customerLatitude,
-                         long: nearByCustomers[index].customerLongitude,
-                         customerData: customer[index],
-                         image: "https://www.google.com/imgres?imgurl=https%3A%2F%2Fimages.indianexpress.com%2F2021%2F12%2Fdoctor-strange-2-1200.jpg&imgrefurl=https%3A%2F%2Findianexpress.com%2Farticle%2Fentertainment%2Fhollywood%2Fdoctor-strange-2-suggest-benedict-cumberbatch-sorcerer-supreme-might-lead-avengers-7698058%2F&tbnid=GxuE_SM1fXrAqM&vet=12ahUKEwjr4bj575_3AhVMxqQKHSC5BRAQMygBegUIARDbAQ..i&docid=6gb_YRZyTk5MWM&w=1200&h=667&q=dr%20strange&ved=2ahUKEwjr4bj575_3AhVMxqQKHSC5BRAQMygBegUIARDbAQ",
-                         showLoading: (value) {
-                           setState(() {
-                             isLoading = value;
-                           });
-                         },
-                       );
-                     } ),
-               )
+                Container(
+                  child: nearByCustomers.length < 10
+                      ? Container(
+                          height: 380,
+                          child: Center(child: Text("No Shop Found")),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: 10,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return MainScreenCards(
+                              height: height,
+                              width: width,
+                              f: f,
+                              menuButton: menuButton,
+                              code: nearByCustomers[index]
+                                  .customerCode
+                                  .toString(),
+                              category: nearByCustomers[index]
+                                  .customerCategory
+                                  .toString(),
+                              shopName: nearByCustomers[index]
+                                  .customerShopName
+                                  .toString(),
+                              address: nearByCustomers[index]
+                                  .customerAddress
+                                  .toString(),
+                              name: nearByCustomers[index]
+                                  .customerContactPersonName
+                                  .toString(),
+                              phoneNo: nearByCustomers[index]
+                                  .customerContactNumber
+                                  .toString(),
+                              lastVisit: nearByCustomers[index]
+                                  .lastVisitDay
+                                  .toString(),
+                              dues: (nearByCustomers[index].dues.toString() ==
+                                      '0')
+                                  ? "0"
+                                  : nearByCustomers[index].dues.toString(),
+                              lastTrans: nearByCustomers[index]
+                                  .lastTransDay
+                                  .toString(),
+                              outstanding: (nearByCustomers[index]
+                                          .outStanding
+                                          .toString() ==
+                                      '0')
+                                  ? "0"
+                                  : nearByCustomers[index]
+                                      .outStanding
+                                      .toString(),
+                              shopAssigned: nearByCustomers[index].shopAssigned,
+                              lat: nearByCustomers[index].customerLatitude,
+                              long: nearByCustomers[index].customerLongitude,
+                              customerData: nearByCustomers[index],
+                              image:
+                                  "https://www.google.com/imgres?imgurl=https%3A%2F%2Fimages.indianexpress.com%2F2021%2F12%2Fdoctor-strange-2-1200.jpg&imgrefurl=https%3A%2F%2Findianexpress.com%2Farticle%2Fentertainment%2Fhollywood%2Fdoctor-strange-2-suggest-benedict-cumberbatch-sorcerer-supreme-might-lead-avengers-7698058%2F&tbnid=GxuE_SM1fXrAqM&vet=12ahUKEwjr4bj575_3AhVMxqQKHSC5BRAQMygBegUIARDbAQ..i&docid=6gb_YRZyTk5MWM&w=1200&h=667&q=dr%20strange&ved=2ahUKEwjr4bj575_3AhVMxqQKHSC5BRAQMygBegUIARDbAQ",
+                              showLoading: (value) {
+                                setState(() {
+                                  isLoading = value;
+                                });
+                              },
+                            );
+                          }),
+                )
               ],
-        ),
-      ),
             ),
-          )),
-          isLoading?loader():Container()
+          ),
+        ),
+      )),
+      isLoading ? loader() : Container()
     ]);
   }
 }

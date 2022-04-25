@@ -169,7 +169,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               lat: customersearchresult[index].customerLatitude,
                               long: customersearchresult[index].customerLongitude,
                               image: "",
-                              customerData: widget.customerModel[index],
+                              customerData: customersearchresult[index],
                               showLoading: (value) {
                                 setState(() {
                                   isLoading = value;

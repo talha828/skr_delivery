@@ -19,6 +19,7 @@ import 'package:skr_delivery/model/partycategories.dart';
 import 'package:skr_delivery/model/town_model.dart';
 import 'package:skr_delivery/screens/EditShop/text_feild_edit_shop.dart';
 import 'package:skr_delivery/screens/loginScreen/passwordScreen/loader.dart';
+import 'package:skr_delivery/screens/main_screen/main_screen.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
 import 'package:skr_delivery/screens/widget/constant.dart';
 
@@ -1010,7 +1011,7 @@ class _EditShopScreenState extends State<EditShopScreen> {
                               // if(userDetails.editable != null)
                               InkWell(
                                 onTap: () {
-                                  if (userDetails.editable == 'Y') editShopNew();
+                                  if (userDetails.editable == 'Y') editShopNew().then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen())));
                                 },
                                 child: Container(
                                   height: height * 0.06,

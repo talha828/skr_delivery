@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skr_delivery/ApiCode/online_database.dart';
 import 'package:skr_delivery/model/user_model.dart';
 import 'package:skr_delivery/ApiCode/online_auth.dart';
+import 'package:skr_delivery/screens/loginScreen/loginSuccessful/login_successful.dart';
 import 'package:skr_delivery/screens/loginScreen/pinCodeScreen/pincode_screen.dart';
 import 'package:skr_delivery/screens/main_screen/main_screen.dart';
 import '../../widget/constant.dart';
@@ -29,7 +32,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
     _auth.verifyPhoneNumber(
         phoneNumber: widget.phoneNumber.toString(),
         verificationCompleted: (credential){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));},
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginSuccessful(password: "+92${controller.text}",)));},
         verificationFailed: (authException){
           Alert(
             context: context,
@@ -63,6 +66,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
           //     builder: (context) => PinCodeScreen(phoneNo: widget.phoneNumber,verificationId: verificationId,)
           // );
           Provider.of<UserModel>(context,listen: false).userSignIn(data);
+
           Navigator.push(
               context, MaterialPageRoute(builder:(context)=> PinCodeScreen(password: controller.text, phoneNo: widget.phoneNumber,verificationId: verificationId,)));
 

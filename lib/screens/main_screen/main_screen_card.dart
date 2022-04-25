@@ -7,8 +7,9 @@ import 'package:skr_delivery/screens/check-in/checkin_screen.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
 import 'package:intl/intl.dart';
 import '../widget/constant.dart';
+
 class MainScreenCards extends StatefulWidget {
-   MainScreenCards({
+  MainScreenCards({
     this.height,
     this.width,
     this.f,
@@ -364,7 +365,10 @@ class _MainScreenCardsState extends State<MainScreenCards> {
                         Spacer(),
                         VariableText(
                           //text: 'Muhammad Ali',
-                          text: widget.f.format(double.parse(widget.dues.toString())),
+                          text: widget.dues.toString() == '0'
+                              ? '0'
+                              : widget.f
+                                  .format(double.parse(widget.dues.toString())),
                           // text: shopdetails[index].ownerName,
                           fontsize: 11,
                           fontcolor: textcolorgrey,
@@ -392,7 +396,10 @@ class _MainScreenCardsState extends State<MainScreenCards> {
                         Spacer(),
                         VariableText(
                           //text: 'Muhammad Ali',
-                          text: widget.f.format(double.parse(widget.outstanding.toString())),
+                          text: widget.outstanding.toString() == '0'
+                              ? '0'
+                              : widget.f.format(
+                                  double.parse(widget.outstanding.toString())),
                           // text: shopdetails[index].ownerName,
                           fontsize: 11,
                           fontcolor: textcolorgrey,
@@ -424,126 +431,126 @@ class _MainScreenCardsState extends State<MainScreenCards> {
           ),
           Row(
               children: List.generate(widget.menuButton.length, (index) {
-                return InkWell(
-                  onTap: () async {
-                    _onSelected(index);
-                    // if (index == 1) {
-                    //   if (templat == null) {
-                    //     Fluttertoast.showToast(
-                    //         msg: 'Please Enable Your Location',
-                    //         toastLength: Toast.LENGTH_SHORT,
-                    //         backgroundColor: Colors.black87,
-                    //         textColor: Colors.white,
-                    //         fontSize: 16.0);
-                    //     //checkAndGetLocation();
-                    //   } else {
-                    //     if(widget.shopAssigned == 'Yes'){
-                    //       // if (double.parse(userData.usercashReceive) >=
-                    //       //     double.parse(userData.usercashLimit) ||
-                    //       //     double.parse(userData.usercashReceive) < 0) {
-                    //       //   limitReachedPopup(
-                    //       //       context: context,
-                    //       //       height: widget.height,
-                    //       //       width: widget.width);
-                    //
-                    //         ///for testing
-                    //         /*widget.showLoading(true);
-                    //         await PostEmployeeVisit(
-                    //             customerCode:
-                    //                 widget.customerData.customerCode,
-                    //             purpose: 'Check In',
-                    //             lat: templat.toString(),
-                    //             long: templong.toString(),
-                    //             customerData: widget.customerData);
-                    //         widget.showLoading(false);*/
-                    //       } else
-                          if (index == 1){
-                            widget.showLoading(true);
-                            // await PostEmployeeVisit(
-                            //     customerCode:
-                            //     widget.customerData.customerCode,
-                            //     purpose: 'Check In',
-                            //     lat: templat.toString(),
-                            //     long: templong.toString(),
-                            //     customerData: widget.customerData);
-                                if (widget.shopAssigned=="Yes"){
-                                  Provider.of<RetrunCartModel>(context, listen: false).retruncreateCart();
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckIn(code: widget.code,name: widget.shopName,image: widget.image,customerData:widget.customerData,)));
-                                }
-                                else{
-                                  Fluttertoast.showToast(
-                                      msg: 'Shop not Assigned',
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      backgroundColor: Colors.black87,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                }
-                            widget.showLoading(false);
-                          }
-                        else if (index == 0) {
-                      ///Launch Map
-                      if (widget.lat ==
-                          null) {
-                        Fluttertoast.showToast(
-                            msg: "Shop location not found",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 3,
-                            backgroundColor: Colors.black87,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      } else {
-                        if (await MapLauncher.isMapAvailable(
-                            MapType.google)) {
-                          await MapLauncher.showMarker(
-                            mapType: MapType.google,
-                            coords: Coords(
-                                widget.lat,
-                                widget
-                                    .long),
-                            title:
-                            widget.shopName,
-                            description:
-                            widget.address,
-                          );
-                        }
-                        // }
-                      }
+            return InkWell(
+                onTap: () async {
+                  _onSelected(index);
+                  // if (index == 1) {
+                  //   if (templat == null) {
+                  //     Fluttertoast.showToast(
+                  //         msg: 'Please Enable Your Location',
+                  //         toastLength: Toast.LENGTH_SHORT,
+                  //         backgroundColor: Colors.black87,
+                  //         textColor: Colors.white,
+                  //         fontSize: 16.0);
+                  //     //checkAndGetLocation();
+                  //   } else {
+                  //     if(widget.shopAssigned == 'Yes'){
+                  //       // if (double.parse(userData.usercashReceive) >=
+                  //       //     double.parse(userData.usercashLimit) ||
+                  //       //     double.parse(userData.usercashReceive) < 0) {
+                  //       //   limitReachedPopup(
+                  //       //       context: context,
+                  //       //       height: widget.height,
+                  //       //       width: widget.width);
+                  //
+                  //         ///for testing
+                  //         /*widget.showLoading(true);
+                  //         await PostEmployeeVisit(
+                  //             customerCode:
+                  //                 widget.customerData.customerCode,
+                  //             purpose: 'Check In',
+                  //             lat: templat.toString(),
+                  //             long: templong.toString(),
+                  //             customerData: widget.customerData);
+                  //         widget.showLoading(false);*/
+                  //       } else
+                  if (index == 1) {
+                    widget.showLoading(true);
+                    // await PostEmployeeVisit(
+                    //     customerCode:
+                    //     widget.customerData.customerCode,
+                    //     purpose: 'Check In',
+                    //     lat: templat.toString(),
+                    //     long: templong.toString(),
+                    //     customerData: widget.customerData);
+                    if (widget.shopAssigned == "Yes") {
+                      Provider.of<RetrunCartModel>(context, listen: false)
+                          .retruncreateCart();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CheckIn(
+                                    code: widget.code,
+                                    name: widget.shopName,
+                                    image: widget.image,
+                                    customerData: widget.customerData,
+                                  )));
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: 'Shop not Assigned',
+                          toastLength: Toast.LENGTH_SHORT,
+                          backgroundColor: Colors.black87,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
                     }
-                  },
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          height: widget.height * 0.05,
-                          width: widget.width * 0.38,
-                          decoration: BoxDecoration(
-                              color: index == 0 ? themeColor1 : themeColor2,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                  color: index == 0
-                                      ? themeColor1
-                                      : widget.shopAssigned == 'Yes'
+                    widget.showLoading(false);
+                  } else if (index == 0) {
+                    ///Launch Map
+                    if (widget.lat == null) {
+                      Fluttertoast.showToast(
+                          msg: "Shop location not found",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 3,
+                          backgroundColor: Colors.black87,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    } else {
+                      if (await MapLauncher.isMapAvailable(MapType.google)) {
+                        await MapLauncher.showMarker(
+                          mapType: MapType.google,
+                          coords: Coords(widget.lat, widget.long),
+                          title: widget.shopName,
+                          description: widget.address,
+                        );
+                      }
+                      // }
+                    }
+                  }
+                },
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      height: widget.height * 0.05,
+                      width: widget.width * 0.38,
+                      decoration: BoxDecoration(
+                          color: index == 0 ? themeColor1 : themeColor2,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                              color: index == 0
+                                  ? themeColor1
+                                  : widget.shopAssigned == 'Yes'
                                       ? themeColor1
                                       : Colors.grey[400])),
-                          child: Center(
-                            child: VariableText(
-                              text: widget.menuButton[index],
-                              fontsize: 11,
-                              fontcolor: index == 0
-                                  ? themeColor2
-                                  : widget.shopAssigned == 'Yes'
+                      child: Center(
+                        child: VariableText(
+                          text: widget.menuButton[index],
+                          fontsize: 11,
+                          fontcolor: index == 0
+                              ? themeColor2
+                              : widget.shopAssigned == 'Yes'
                                   ? themeColor1
                                   : Colors.grey[400],
-                              weight: FontWeight.w700,
-                            ),
-                          ),
+                          weight: FontWeight.w700,
                         ),
-                      ],
-                    ));
-              }))
+                      ),
+                    ),
+                  ],
+                ));
+          }))
         ],
       ),
     );

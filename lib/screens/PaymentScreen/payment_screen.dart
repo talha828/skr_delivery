@@ -248,9 +248,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                            //String msgData = "آپ نے ہمارے نمائندے ${userData.userName} کو $totalAmount کا آرڈر دیا ہے۔\nشکریہ۔";
                                            String msgData = "آپ نے ہمارے نمائندے ${userData.userName} کو $totalAmount کی رقم ادا کی ہے۔";
                                            msgData += '\n';
-                                           msgData += 'آگر یہ رقم درست ہے تو کنفرمیش کے لئے کوڈ $msgPin ہمارے نمائندے کو دے دیجئے۔';
+                                           msgData += 'آگر یہ رقم درست ہے تو کنفرمیش کے لئے $msgPin ہمارے نمائندے کو بتا دیجئے۔';
                                            msgData += '\n';
-                                           msgData += 'آگر یہ رقم درست نہیں تو ہمارے نمائندے کو کوڈ نہیں دیجئے۔';
+                                           msgData += 'آگر یہ رقم درست نہیں تو ہمارے نمائندے کو نہیں بتاۂے۔';
                                            msgData += '\n';
                                            msgData += 'شکریہ۔';
 

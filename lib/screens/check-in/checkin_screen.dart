@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
 import 'package:skr_delivery/model/product_model.dart';
 import 'package:skr_delivery/model/retrun_cart_model.dart';
@@ -13,6 +14,7 @@ import 'package:skr_delivery/screens/RetrunScreen/reurn_screen.dart';
 import 'package:skr_delivery/screens/check-in/wallet_card.dart';
 import 'package:skr_delivery/screens/widget/constant.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart' as loc;
 
 import '../../ApiCode/online_database.dart';
 import 'customer_info_card.dart';
@@ -28,6 +30,9 @@ class CheckIn extends StatefulWidget {
 }
 
 class _CheckInState extends State<CheckIn> {
+  Coordinates userLatLng;
+  loc.Location location = new loc.Location();
+
   bool isLoading=true;
   var f = NumberFormat("###,###.0#", "en_US");
   double walletCapacity = 0;
@@ -136,9 +141,15 @@ class _CheckInState extends State<CheckIn> {
   }
   @override
   void initState() {
+    getLocation();
     getCustomerTransactionData();
     getAllProductData();
     super.initState();
+  }
+  void getLocation() async{
+    var _location = await location.getLocation();
+    userLatLng = Coordinates(_location.latitude, _location.longitude);
+    print("userLatLng: " + userLatLng.toString());
   }
   @override
   Widget build(BuildContext context) {
@@ -160,9 +171,9 @@ class _CheckInState extends State<CheckIn> {
               CustomerInfo(height: height,code: widget.code,name: widget.name,image:widget.image,lat: "123",long: "456",location: widget.customerData.customerAddress.toString(),shopDetails: widget.customerData,),
               CustomerWallet(height: height, f: f,walletCapacity: walletCapacity,useBalance: usedBalance,availableBalances: availableBalance,),
               SizedBox(height: 20,),
-              CheckInButton(image: "assets/icons/delivery.png",text: "Delivery",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryScreen(long: 123.0,lat: 456.0,shopDetails: widget.customerData,))),),
-              CheckInButton(image: "assets/icons/payment.png",text: "Payment",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentScreen(lat: "123",long: "456",customerData: widget.customerData,))),),
-              CheckInButton(image: "assets/icons/exchange.png",text: "Return",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ReturnScreen(returncartData:returncartData,shopDetails: widget.customerData,lat: 123.0,long: 456.0,product: product,))),),
+              CheckInButton(image: "assets/icons/delivery.png",text: "Delivery",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,shopDetails: widget.customerData,))),),
+              CheckInButton(image: "assets/icons/payment.png",text: "Payment",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,customerData: widget.customerData,))),),
+              CheckInButton(image: "assets/icons/exchange.png",text: "Return",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ReturnScreen(returncartData:returncartData,shopDetails: widget.customerData,long:userLatLng.longitude ,lat:userLatLng.latitude,product: product,))),),
             ],
           ),
         ),

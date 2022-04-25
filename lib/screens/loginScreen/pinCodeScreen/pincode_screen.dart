@@ -45,7 +45,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                     ),
                   )),
                     Text(
-                 "Enter a 6 digit code send you at +923012070920",
+                 "Enter a 6 digit code send you at ${widget.phoneNo}",
                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                  ),
               SizedBox(
