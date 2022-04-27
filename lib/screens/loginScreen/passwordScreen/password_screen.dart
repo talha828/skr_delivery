@@ -37,7 +37,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) => LoginSuccessful(
-                        password: "+92${controller.text}",
+                        password: controller.text.toString(),
                       )));
         },
         verificationFailed: (authException) {

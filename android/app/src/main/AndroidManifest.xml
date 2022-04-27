@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
    <application
-        android:label="skr_delivery"
+        android:label="SUQ - DELIVERY"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
