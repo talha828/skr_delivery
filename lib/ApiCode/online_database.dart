@@ -115,25 +115,7 @@ class OnlineDataBase {
     return response;
   }
 
-  static Future<dynamic> sendTextMultiple(
-      List<String> receivers, String msgData) async {
-    String url =
-        'https://jsims.com.pk/OnPointSMS.aspx?key=$smsApiKey&sender=SKR';
-    url += '&receiver=';
-    for (int i = 0; i < receivers.length; i++) {
-      if (i != 0) {
-        url += ',' + receivers[i].toString();
-      } else {
-        url += receivers[i].toString();
-      }
-    }
-    url += '&msgdata=$msgData';
-    //url += '&camp=camp1';
-    print(url);
-    var response = await http.post(Uri.parse(url));
-    print(response.statusCode.toString());
-    return response;
-  }
+
 
   static Future<dynamic> postPayment(
       {String customerCode,
@@ -428,6 +410,25 @@ class OnlineDataBase {
         'getwalletstatus?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass');
     print("url is: " + url.toString());
     final response = await http.get(url);
+    return response;
+  }
+  static Future<dynamic> sendTextMultiple(
+      List<String> receivers, String msgData) async {
+    String url =
+        'https://jsims.com.pk/OnPointSMS.aspx?key=$smsApiKey&sender=SKR';
+    url += '&receiver=';
+    for (int i = 0; i < receivers.length; i++) {
+      if (i != 0) {
+        url += ',' + receivers[i].toString();
+      } else {
+        url += receivers[i].toString();
+      }
+    }
+    url += '&msgdata=$msgData';
+    //url += '&camp=camp1';
+    print(url);
+    var response = await http.post(Uri.parse(url));
+    print(response.statusCode.toString());
     return response;
   }
 }

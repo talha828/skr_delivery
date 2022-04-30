@@ -91,7 +91,7 @@ class CustomerModel extends ChangeNotifier {
       customerLongitude = json['LONGITUDE']??null;
       customerAddress = json['ADDRESS'] ?? 'Not Found';
       customerContactPersonName = json['OWNER'] ?? '-';
-      customerContactNumber = json['CELL'].toString() ?? '-';
+      customerContactNumber = json['PHONE1'].toString() ?? '-';
       customerCreditLimit = json['CREDIT_LIMIT'].toString();
       customerImage = json['IMAGEURL'];
       customerCountryName = json["COUNTRY"];

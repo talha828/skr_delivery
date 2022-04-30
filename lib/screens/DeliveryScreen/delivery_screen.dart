@@ -1,13 +1,18 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:skr_delivery/model/box_model.dart';
+import 'package:skr_delivery/model/customerModel.dart';
 import 'package:skr_delivery/model/delivery_model.dart';
+import 'package:skr_delivery/model/user_model.dart';
 import 'package:skr_delivery/screens/DeliveryScreen/succesflly_delieverd_order_screen.dart';
 import 'package:skr_delivery/screens/loginScreen/passwordScreen/loader.dart';
+import 'package:skr_delivery/screens/message_pin_screen/message_pin_screen.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
 import 'package:skr_delivery/screens/widget/constant.dart';
 
@@ -295,7 +300,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
         backgroundColor: themeColor1,
         leading: InkWell(
             onTap: ()=>Navigator.pop(context),
-            child: Icon(Icons.arrow_back,color: Colors.white,)), 
+            child: Icon(Icons.arrow_back,color: Colors.white,)),
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -318,189 +323,9 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                         color: themeColor1,),
                     ),
                   )):orderDetailsBlock(height,width),
-
-              // Shimmer.fromColors( baseColor: Colors.grey[300],
-              //   highlightColor: Colors.grey[100],
-              //   enabled: true,
-              //   child:   ListView.builder(
-              //       shrinkWrap: true,
-              //       scrollDirection: Axis.vertical,
-              //       physics: ScrollPhysics(),
-              //       itemCount: 2,
-              //       itemBuilder: (BuildContext context,int index){
-              //         return  Column(
-              //           children: [
-              //             Padding(
-              //               padding:  EdgeInsets.symmetric(horizontal: screenpadding),
-              //               child: Container(
-              //
-              //                 width:width,
-              //                 decoration: BoxDecoration(
-              //                   borderRadius: BorderRadius.circular(5),
-              //                   border:Border.all(color: selectedIndex[index]==true ?Color(0xffF6821F).withOpacity(0.6):Color(0xffffffff).withOpacity(0.6)),
-              //                   color:selectedIndex[index]==true ?Color(0xffFFCB9F).withOpacity(0.5):themeColor2,
-              //                 ),
-              //                 child: Padding(
-              //                   padding:  EdgeInsets.symmetric(vertical: screenpadding,horizontal: screenpadding/2),
-              //                   child: Row(
-              //                     crossAxisAlignment:CrossAxisAlignment.start,
-              //                     children: [
-              //                       SizedBox(width:height*sizedboxvalue/2,),
-              //                       Expanded(
-              //                         flex: 13,
-              //                         child:
-              //                         Container(
-              //                           height: height*0.07,
-              //                           child:    Column(
-              //                             crossAxisAlignment:CrossAxisAlignment.start,
-              //                             children: [
-              //                               VariableText(
-              //                                 text:'',
-              //                                 fontsize:14,fontcolor: textcolorblack,
-              //                                 weight: FontWeight.w700,
-              //                                 fontFamily: fontRegular,
-              //                               ),
-              //                               VariableText(
-              //                                 text:'',
-              //                                 fontsize:12,fontcolor: textcolorgrey,
-              //                                 weight: FontWeight.w400,
-              //                                 fontFamily: fontRegular,
-              //                               ),
-              //                             ],
-              //                           ),
-              //
-              //                         ),
-              //                       ),
-              //                       SizedBox(width:height*sizedboxvalue,),
-              //                       Container(
-              //                         child: Expanded(
-              //                           flex: 7,
-              //                           child: InkWell(
-              //                             onTap:(){
-              //
-              //                             },
-              //                             child: Container(height: height*0.04,
-              //
-              //
-              //                               decoration: BoxDecoration(
-              //                                   color:themeColor1,
-              //                                   borderRadius: BorderRadius.circular(5)
-              //                               ),
-              //                               child:    Row(
-              //                                 crossAxisAlignment:CrossAxisAlignment.center,
-              //                                 mainAxisAlignment:MainAxisAlignment.center,
-              //                                 children: [
-              //                                   VariableText(
-              //                                     text:'',
-              //                                     fontsize:13,fontcolor: themeColor2,
-              //                                     weight: FontWeight.w700,
-              //                                     fontFamily: fontRegular,
-              //                                   ),
-              //                                   SizedBox(width: height*0.01,),
-              //                                   Image.asset('assets/icons/arrowright.png',color:Colors.red,scale: 2.5,)
-              //                                 ],
-              //                               ),),
-              //                           ),
-              //                         ),
-              //                       ),
-              //
-              //
-              //                     ],
-              //                   ),
-              //                 ),
-              //               ),
-              //
-              //             ),
-              //             SizedBox(height:height*sizedboxvalue,),
-              //           ],
-              //         );
-              //       }),
-              // )
-
-
             ]
         ),
       ),
-/*      bottomNavigationBar: BottomAppBar(
-          child: Container(
-          height: height*0.15,
-          color: themeColor2,
-          child: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: screenpadding),
-            child: Column(
-
-              children: [
-                SizedBox(height: height*sizedboxvalue,),
-                Row(
-                  children: [
-                    VariableText(
-                      text:'Shipping:',
-                      fontsize:11,fontcolor: textcolorgrey,
-                      weight: FontWeight.w400,
-                      fontFamily: fontRegular,
-                    ),
-                    Spacer(),
-                    VariableText(
-                      text:'Rs ${delieveryFee.toString()}',
-                      fontsize:11,fontcolor: textcolorgrey,
-                      weight: FontWeight.w400,
-                      fontFamily: fontRegular,
-                    ),
-
-                  ],
-                ),
-                SizedBox(height: height*sizedboxvalue/3,),
-                Row(
-                  children: [
-                    VariableText(
-                      text:'Total: ',
-                      fontsize:11,fontcolor: textcolorblack,
-                      weight: FontWeight.w500,
-                      fontFamily: fontMedium,
-                    ),
-                    Spacer(),
-                    VariableText(
-                      text:'Rs ${subtotal.toString()}',
-                      fontsize:15,fontcolor: themeColor1,
-                      weight: FontWeight.w700,
-                      fontFamily: fontRegular,
-                    ),
-
-                  ],
-                ),
-                SizedBox(height: height*sizedboxvalue/2,),
-                InkWell(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (_)=>SucessFullyDelieveredOrderScreen()));
-                  },
-
-                  child: Container(
-                    height: height*0.06,
-                    decoration: BoxDecoration(
-                      color: themeColor1,
-                      borderRadius: BorderRadius.circular(4),
-
-                    ),
-
-                    child:   Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: screenpadding),
-                      child: Center(
-                        child: VariableText(
-                          text: 'DELIEVER',
-                          weight: FontWeight.w700,
-                          fontsize: 15,
-                          fontFamily: fontMedium,
-                          fontcolor: themeColor2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        )
-      ),*/
     );
   }
   Widget orderDetailsBlock(double height,double width){
@@ -530,8 +355,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
-                        border:Border.all(color: /*selectedIndex[index]==true ?Color(0xffF6821F).withOpacity(0.6):*/Color(0xffffffff).withOpacity(0.6)),
-                        color:/*selectedIndex[index]==true ?Color(0xffFFCB9F).withOpacity(0.5):*/themeColor2,
+                        border:Border.all(color: Color(0xffffffff).withOpacity(0.6)),
+                        color:themeColor2,
                       ),
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 15,horizontal: 15/2),
@@ -631,43 +456,6 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                         child: Row(
                           crossAxisAlignment:CrossAxisAlignment.start,
                           children: [
-                            /*
-                            check box
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                              child: InkWell(
-                                  onTap: (){
-                                    print("print "+index.toString());
-                                      if(selectedIndex[index]==true){
-                                        selectedIndex[index]=false;
-                                       delieveryFee-=deliveryDetails['delivery'][index]['delieveryFee'];
-                                        subtotal-=deliveryDetails['delivery'][index]['subtotal'];  }
-                                      else {
-                                        selectedIndex[index]=true;
-                                        delieveryFee+=deliveryDetails['delivery'][index]['delieveryFee'];
-                                        subtotal+=deliveryDetails['delivery'][index]['subtotal'];
-
-                                      }
-                                      setState(() {
-                                      });
-
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: selectedIndex[index]==true ? themeColor1 : Colors.white,
-                                        border: Border.all(
-                                            color: selectedIndex[index]==true
-                                                ? themeColor1
-                                                : themeColor1),
-                                        borderRadius: BorderRadius.circular(3)),
-                                    child: Center(
-                                        child:
-                                        Icon(Icons.check, size: 11, color: Colors.white)),
-                                  ),
-                                ),
-                               ),
-                            ),*/
                             SizedBox(width:height*sizedboxvalue/2,),
                             Expanded(
                               flex: 13,
@@ -742,6 +530,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
   List<int> initialCount = [];
 
+
   void showBoxDialog({BoxModel boxDetails}) {
     double height=MediaQuery.of(context).size.height;
     double width=MediaQuery.of(context).size.width;
@@ -807,19 +596,6 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  /*Expanded(
-                                    flex: 1,
-                                    child: InkWell(
-                                      onTap:(){
-                                        //fulldeliveryDetails.removeAt(index);
-                                        setState(() {
-                                        });
-                                      },
-                                      child: Container(
-                                        child: Image.asset('assets/icons/delete.png',scale: 3.5,),
-                                      ),
-                                    ),
-                                  ),*/
                                   SizedBox(width:height*sizedboxvalue/2,),
                                   Expanded(
                                     flex: 3,
@@ -832,27 +608,6 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                       ),
                                       child: Row(
                                         children: [
-                                          /*Expanded(
-                                            flex: 2,
-                                            child: InkWell(
-                                              onTap: (){
-                                                if( fulldeliveryDetails[index].quantity>1){
-                                                  setState(() {
-                                                    fulldeliveryDetails[index].quantity--;
-                                                    fulldeliveryDetails[index].itemcountController.text=fulldeliveryDetails[index].quantity.toString();
-                                                    fulldeliveryDetails[index].itemtotal= fulldeliveryDetails[index].quantity* fulldeliveryDetails[index].rate;
-                                                  });
-                                                }
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(5),bottomLeft: Radius.circular(5)),
-                                                ),
-                                                height: height*0.04,
-                                                //child: Image.asset('assets/icons/minus.png',scale: 2.5,),
-                                              ),
-                                            ),
-                                          ),*/
                                           Expanded(
                                             child: Container(
                                               height: height*0.04,
@@ -880,27 +635,6 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                               ),
                                             ),
                                           ),
-                                         /* Expanded(
-                                            flex: 2,
-                                            child: InkWell(
-                                              onTap: (){
-                                                if( fulldeliveryDetails[index].quantity < initialCount[index]){
-                                                  setState(() {
-                                                    fulldeliveryDetails[index].quantity++;
-                                                    fulldeliveryDetails[index].itemcountController.text=fulldeliveryDetails[index].quantity.toString();
-                                                    fulldeliveryDetails[index].itemtotal= fulldeliveryDetails[index].quantity* fulldeliveryDetails[index].rate;
-                                                  });
-                                                }
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.only(topRight: Radius.circular(5),bottomRight: Radius.circular(5)),
-                                                ),
-                                                height: height*0.04,
-                                                //child: Image.asset('assets/icons/plus.png',scale: 2.5,),
-                                              ),
-                                            ),
-                                          ),*/
                                         ],
                                       ),
                                     ),
@@ -985,52 +719,79 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                   InkWell(
                     onTap: () async {
                       try {
-                        setState(() {
-                          isLoading2 = true;
-                        });
-                        var response = await OnlineDataBase
-                            .postBoxDeliverDetails(boxDetails: boxDetails,
-                            lat: widget.lat.toString(),
-                            long: widget.long.toString(),
-                            customerCode: widget.shopDetails.customerCode);
-                        print("Response is: " + response.statusCode.toString());
-                        if (response.statusCode == 200) {
-                          var data = jsonDecode(
-                              utf8.decode(response.bodyBytes));
-                          print("Response is: " + data.toString());
-                          setState(() {
-                            isLoading2 = false;
-                          });
-                          Navigator.pop(context);
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (_) =>
-                                  SucessFullyDelieveredOrderScreen(
-                                    shopDetails: widget.shopDetails, lat: widget
-                                      .lat, long: widget.long,)));
+                        setLoading(true);
+                        List<String> tempContact = [];
+                        final userData = Provider.of<UserModel>(context, listen: false);
+                        if(widget.shopDetails.customerContactNumber != null){
+                          tempContact.add(widget.shopDetails.customerContactNumber.substring(0, widget.shopDetails.customerContactNumber.length));
                         }
-                        else if (response.statusCode == 500) {
-                          setState(() {
-                            Fluttertoast.showToast(
-                                msg: "Product is out of stock",
-                                toastLength: Toast.LENGTH_SHORT,
-                                backgroundColor: Colors.black87,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                            isLoading2 = false;
-                          });
+                        if(widget.shopDetails.customerContactNumber2 != null){
+                          tempContact.add(widget.shopDetails.customerContactNumber2);
+                        }else{
+                          //tempContact.add('+923340243440');
                         }
-                        else {
-                          setState(() {
-                            isLoading2 = false;
-                          });
-                          // print("delivery screen --> ${response.body.toString()}");
+                        String msgPin = '';
+                        var rng = Random();
+                        for (var i = 0; i < 4; i++) {
+                          msgPin += rng.nextInt(9).toString();
+                        }
+                        print(msgPin);
+                        //String msgData = "آپ نے ہمارے نمائندے ${userData.userName} کو $totalAmount کا آرڈر دیا ہے۔\nشکریہ۔";
+                        String msgData = "آپ نے ہمارے نمائندے ${userData.userName} سے ${boxDetails.totalAmount} روپے کا سامان لیا ہے۔";
+                        msgData += '\n';
+                        msgData += 'آگر یہ رقم درست ہے تو کنفرمیش کے لئے $msgPin ہمارے نمائندے کو بتا دیجئے۔';
+                        msgData += '\n';
+                        msgData += 'آگر یہ رقم درست نہیں تو ہمارے نمائندے کو نہیں بتاۂے۔';
+                        msgData += '\n';
+                        msgData += 'شکریہ۔';
+
+                        var response = await OnlineDataBase.sendTextMultiple(tempContact, msgData);
+                        if(response.statusCode == 200){
+                          setLoading(false);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => MessagePinScreen(
+                                  pin: msgPin,
+                                  contactNumbers: tempContact,
+                                  onSuccess: ()async{
+                                    print("@@@@@@@@@@@@@");
+
+                                    var response = await OnlineDataBase
+                                        .postBoxDeliverDetails(boxDetails: boxDetails,
+                                        lat: widget.lat.toString(),
+                                        long: widget.long.toString(),
+                                        customerCode: widget.shopDetails.customerCode);
+                                    print("Post box Response is: " + response.statusCode.toString());
+                                    if (response.statusCode == 200) {
+                                      var data = jsonDecode(
+                                          utf8.decode(response.bodyBytes));
+                                      print("Post box Response is: " + data.toString());
+                                      String msgData = "آپ ${boxDetails.totalAmount} روپے کا سامان لے چکے ہیں۔ شکریہ۔";
+
+                                      var responseMsg = await OnlineDataBase.sendTextMultiple(tempContact, msgData);
+                                      if(responseMsg.statusCode == 200){
+                                        print("Message sent!!!!!");
+                                      }
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (_) =>
+                                              SucessFullyDelieveredOrderScreen(
+                                                shopDetails: widget.shopDetails, lat: widget
+                                                  .lat, long: widget.long,))
+                                      );
+                                    }
+                                    //setLoading(false);
+                                  },
+                                ),
+                              ));
+                        }else {
+                          setLoading(false);
                           Fluttertoast.showToast(
-                              msg: "Internet Issue",
-                              toastLength: Toast.LENGTH_LONG,
-                              backgroundColor: Colors.black87,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
+                              msg: "Code not sent, Try again",
+                              toastLength: Toast.LENGTH_SHORT);
                         }
+
+
                       } catch (e, stack) {
                         setState(() {
                           isLoading2 = false;
