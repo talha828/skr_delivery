@@ -22,6 +22,7 @@ import 'package:skr_delivery/screens/loginScreen/phonenumber/phonenumber.dart';
 import 'package:skr_delivery/screens/splash_screen/splash_screen.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
 import 'package:skr_delivery/screens/widget/constant.dart';
+import '../assign_shop.dart';
 import 'all_shop.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart' as loc;
@@ -592,7 +593,7 @@ class _MainScreenState extends State<MainScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Near by me",
+                    "Assign Shop",
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -604,7 +605,7 @@ class _MainScreenState extends State<MainScreen> {
           body: TabBarView(
             children: [
               AllShop(),
-              ScreenTwo(),
+              AssignShop(),
             ],
           ),
         ),

@@ -263,14 +263,14 @@ class _AllShopState extends State<AllShop> {
                               ))),
                 ),
                 Container(
-                  child: nearByCustomers.length < 10
+                  child: nearByCustomers.length < 0
                       ? Container(
                           height: 380,
                           child: Center(child: Text("No Shop Found")),
                         )
                       : ListView.builder(
                           shrinkWrap: true,
-                          itemCount: 10,
+                          itemCount: nearByCustomers.length,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             return MainScreenCards(

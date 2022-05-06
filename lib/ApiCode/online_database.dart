@@ -27,6 +27,14 @@ class OnlineDataBase {
     final response = await http.get(Uri.parse(url));
     return response;
   }
+  static Future<dynamic> getAssignShop() async {
+    String url = directory +
+        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=+923163301494&pin_password=555&pin_datatype=DELIVERYMAN';//TODO num, pass
+    print("url is: " + url);
+    //TODO set phone number and password
+    final response = await http.get(Uri.parse(url));
+    return response;
+  }
 
   static Future<dynamic> getImage() async {
     String url = directory +
