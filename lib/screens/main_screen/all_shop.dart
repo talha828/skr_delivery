@@ -251,7 +251,7 @@ class _AllShopState extends State<AllShop> {
                 ),
                 NearByYouAndViewAll(
                   itemCount:
-                      nearByCustomers.length > 10 ? 10 : nearByCustomers.length,
+                      nearByCustomers.length,
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -270,7 +270,7 @@ class _AllShopState extends State<AllShop> {
                         )
                       : ListView.builder(
                           shrinkWrap: true,
-                          itemCount: nearByCustomers.length,
+                      itemCount: nearByCustomers.length>10?10:nearByCustomers.length,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             return MainScreenCards(
