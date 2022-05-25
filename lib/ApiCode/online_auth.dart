@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 
-const String Server="http://124.29.202.191:8181/ords/skr2/";
+const String Server="http://api.visionsoft-pk.com:8181/ords/skr2/";
 const String directory=Server+"app/";
 class Auth{
   static Future<dynamic> signIn2(String phoneno,String password) async {

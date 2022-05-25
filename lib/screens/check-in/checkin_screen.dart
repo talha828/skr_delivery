@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
+import 'package:skr_delivery/model/customerModel.dart';
 import 'package:skr_delivery/model/product_model.dart';
 import 'package:skr_delivery/model/retrun_cart_model.dart';
 import 'package:skr_delivery/screens/DeliveryScreen/delivery_screen.dart';
@@ -32,7 +33,7 @@ class CheckIn extends StatefulWidget {
 class _CheckInState extends State<CheckIn> {
   Coordinates userLatLng;
   loc.Location location = new loc.Location();
-
+  CustomerModel userDetails;
   bool isLoading=true;
   var f = NumberFormat("###,###.0#", "en_US");
   double walletCapacity = 0;
@@ -44,6 +45,18 @@ class _CheckInState extends State<CheckIn> {
     setState(() {
       isLoading = loading;
     });
+  }
+  getUser() async {
+    var response =
+    await OnlineDataBase.getSingleCustomer(widget.customerData.customerCode);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
+      print(data.toString());
+      userDetails = CustomerModel.fromModel(data['results'][0]);
+    } else {
+      print("User not found!!!!!");
+      setLoading(false);
+    }
   }
   void getCustomerTransactionData() async {
     try {
@@ -74,7 +87,7 @@ class _CheckInState extends State<CheckIn> {
       print('exception is' + e.toString());
       setLoading(false);
       Fluttertoast.showToast(
-          msg: "Something went wrong try again later",
+          msg: e.toString(),
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: Colors.black87,
           textColor: Colors.white,
@@ -132,7 +145,7 @@ class _CheckInState extends State<CheckIn> {
       print('exception is' + e.toString() + stack.toString());
       setLoading(false);
       Fluttertoast.showToast(
-          msg: "Something went wrong try again letter",
+          msg: e.toString(),
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: Colors.black87,
           textColor: Colors.white,
@@ -141,6 +154,7 @@ class _CheckInState extends State<CheckIn> {
   }
   @override
   void initState() {
+    getUser();
     getLocation();
     getCustomerTransactionData();
     getAllProductData();
@@ -171,7 +185,7 @@ class _CheckInState extends State<CheckIn> {
               CustomerInfo(height: height,code: widget.code,name: widget.name,image:widget.image,lat: "123",long: "456",location: widget.customerData.customerAddress.toString(),shopDetails: widget.customerData,),
               CustomerWallet(height: height, f: f,walletCapacity: walletCapacity,useBalance: usedBalance,availableBalances: availableBalance,),
               SizedBox(height: 20,),
-              CheckInButton(image: "assets/icons/delivery.png",text: "Delivery",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,shopDetails: widget.customerData,))),),
+              CheckInButton(image: "assets/icons/delivery.png",text: "Delivery",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,shopDetails: userDetails,))),),
               CheckInButton(image: "assets/icons/payment.png",text: "Payment",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,customerData: widget.customerData,))),),
               CheckInButton(image: "assets/icons/exchange.png",text: "Return",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ReturnScreen(returncartData:returncartData,shopDetails: widget.customerData,long:userLatLng.longitude ,lat:userLatLng.latitude,product: product,))),),
             ],
