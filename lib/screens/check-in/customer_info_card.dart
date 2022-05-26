@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:skr_delivery/screens/EditShop/edit_shop.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
@@ -132,21 +133,29 @@ class CustomerInfo extends StatelessWidget {
             Expanded(
               flex: 3,
               child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => EditShopScreen(
-                            lat: lat,
-                            long: long,
-                            shopData: shopDetails,
-                            locationdata: location,
-                          )));
-                },
+                onTap: ()=>
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.INFO,
+                  animType: AnimType.BOTTOMSLIDE,
+                  title: 'No access',
+                  btnOkOnPress: () {},
+                )..show(),
+
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (_) => EditShopScreen(
+                  //           lat: lat,
+                  //           long: long,
+                  //           shopData: shopDetails,
+                  //           locationdata: location,
+                  //         )));
+
                 child: Container(
                   height: height * 0.045,
                   decoration: BoxDecoration(
-                      color: themeColor1 /*:Color(0xff1F92F6)*/,
+                      color: Colors.grey /*:Color(0xff1F92F6)*/,
                       borderRadius: BorderRadius.circular(5)),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),

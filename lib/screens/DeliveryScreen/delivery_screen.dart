@@ -1407,10 +1407,10 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                   borderRadius: BorderRadius.circular(5),
                   child: LayoutBuilder(
                     builder: (_, constraints) => Image.network(
-                        imageurl.toString() == "No Image" || imageurl == null
-                            ? "https://i.stack.imgur.com/y9DpT.jpg"
-                            : imageurl.split('{"')[1].split('"}')[0],
-                        fit: BoxFit.fill, loadingBuilder: (BuildContext context,
+                       // imageurl.toString() == "No Image" || imageurl == null ?
+                        "https://i.stack.imgur.com/y9DpT.jpg"
+                          //  : imageurl.split('{"')[1].split('"}')[0],
+                        ,fit: BoxFit.fill, loadingBuilder: (BuildContext context,
                             Widget child, ImageChunkEvent loadingProgress) {
                       if (loadingProgress == null) return child;
                       return Center(

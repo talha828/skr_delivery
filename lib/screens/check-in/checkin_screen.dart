@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -47,12 +48,14 @@ class _CheckInState extends State<CheckIn> {
     });
   }
   getUser() async {
+    setLoading(true);
     var response =
     await OnlineDataBase.getSingleCustomer(widget.customerData.customerCode);
     if (response.statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
       print(data.toString());
       userDetails = CustomerModel.fromModel(data['results'][0]);
+      setLoading(false);
     } else {
       print("User not found!!!!!");
       setLoading(false);
@@ -164,6 +167,7 @@ class _CheckInState extends State<CheckIn> {
     var _location = await location.getLocation();
     userLatLng = Coordinates(_location.latitude, _location.longitude);
     print("userLatLng: " + userLatLng.toString());
+    setState(() {});
   }
   @override
   Widget build(BuildContext context) {
@@ -186,8 +190,26 @@ class _CheckInState extends State<CheckIn> {
               CustomerWallet(height: height, f: f,walletCapacity: walletCapacity,useBalance: usedBalance,availableBalances: availableBalance,),
               SizedBox(height: 20,),
               CheckInButton(image: "assets/icons/delivery.png",text: "Delivery",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,shopDetails: userDetails,))),),
-              CheckInButton(image: "assets/icons/payment.png",text: "Payment",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,customerData: widget.customerData,))),),
-              CheckInButton(image: "assets/icons/exchange.png",text: "Return",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ReturnScreen(returncartData:returncartData,shopDetails: widget.customerData,long:userLatLng.longitude ,lat:userLatLng.latitude,product: product,))),),
+              CheckInButton(image: "assets/icons/payment.png",text: "Payment",onTap: ()=>
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.INFO,
+                animType: AnimType.BOTTOMSLIDE,
+                title: 'No access',
+                btnOkOnPress: () {},
+              )..show(),
+                  //Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,customerData: widget.customerData,))),
+              ),
+              CheckInButton(image: "assets/icons/exchange.png",text: "Return",onTap: ()=>
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.INFO,
+                animType: AnimType.BOTTOMSLIDE,
+                title: 'No access',
+                btnOkOnPress: () {},
+              )..show(),
+                 // Navigator.push(context, MaterialPageRoute(builder: (context)=>ReturnScreen(returncartData:returncartData,shopDetails: widget.customerData,long:userLatLng.longitude ,lat:userLatLng.latitude,product: product,))),
+              ),
             ],
           ),
         ),
