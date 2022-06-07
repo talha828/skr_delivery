@@ -65,7 +65,7 @@ class OnlineDataBase {
             'gettransactions?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customercode&pin_datatype=$dataType&pin_order_no=$orderId'
         : directory +
             'gettransactions?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customercode&pin_datatype=$dataType');
-    print("get delivery details url is" + url.toString());
+    print("get delivery details url is " + url.toString());
     final response = await http.get(url);
     return response;
   }
@@ -441,4 +441,13 @@ class OnlineDataBase {
     print(response.statusCode.toString());
     return response;
   }
+  static Future<dynamic> sendText(String receiver, String msgData) async {
+    String url = 'https://lifetimesms.com/json?api_token=573faa073b82e10a0d9c18b6e5215aa87f2f717165&api_secret=SUQ&to=$receiver&from=8584&message=$msgData';
+    // String url = 'https://jsims.com.pk/OnPointSMS.aspx?key=$smsApiKey&sender=SKR&receiver=$receiver&msgdata=$msgData';
+    print(url);
+    var response = await http.post(Uri.parse(url));
+    print(response.statusCode.toString());
+    return response;
+  }
+
 }

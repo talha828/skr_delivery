@@ -13,3 +13,7 @@ const feildunderlineColor = Color(0xFFE3E3E3);
 const feildContainerColor = Color(0xffF4F4F4);
 const feildBorderColor = Color(0xffEEEEEE);
 const hinttextColor = Color(0xffB2B2B2);
+
+
+const fontMedium = "Roboto-Medium";
+const fontRegular = "Roboto-Regular";

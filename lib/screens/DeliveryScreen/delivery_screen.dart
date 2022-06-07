@@ -11,6 +11,7 @@ import 'package:skr_delivery/model/customerModel.dart';
 import 'package:skr_delivery/model/delivery_model.dart';
 import 'package:skr_delivery/model/user_model.dart';
 import 'package:skr_delivery/screens/DeliveryScreen/succesflly_delieverd_order_screen.dart';
+import 'package:skr_delivery/screens/PaymentScreen/pin_payment_screen.dart';
 import 'package:skr_delivery/screens/loginScreen/passwordScreen/loader.dart';
 import 'package:skr_delivery/screens/message_pin_screen/message_pin_screen.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
@@ -150,6 +151,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
     // TODO: implement initState
     super.initState();
     getMainDeliveryDetails();
+    getBoxDeliveryDetails();
     for (var item in deliveryDetails['delivery']) {
       selectedIndex.add(false);
     }
@@ -660,9 +662,22 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                             children: [
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  /*Expanded(
+                                    flex: 1,
+                                    child: InkWell(
+                                      onTap:(){
+                                        //fulldeliveryDetails.removeAt(index);
+                                        setState(() {
+                                        });
+                                      },
+                                      child: Container(
+                                        child: Image.asset('assets/icons/delete.png',scale: 3.5,),
+                                      ),
+                                    ),
+                                  ),*/
                                   SizedBox(
                                     width: height * sizedboxvalue / 2,
                                   ),
@@ -678,6 +693,27 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                       ),
                                       child: Row(
                                         children: [
+                                          /*Expanded(
+                                            flex: 2,
+                                            child: InkWell(
+                                              onTap: (){
+                                                if( fulldeliveryDetails[index].quantity>1){
+                                                  setState(() {
+                                                    fulldeliveryDetails[index].quantity--;
+                                                    fulldeliveryDetails[index].itemcountController.text=fulldeliveryDetails[index].quantity.toString();
+                                                    fulldeliveryDetails[index].itemtotal= fulldeliveryDetails[index].quantity* fulldeliveryDetails[index].rate;
+                                                  });
+                                                }
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(5),bottomLeft: Radius.circular(5)),
+                                                ),
+                                                height: height*0.04,
+                                                //child: Image.asset('assets/icons/minus.png',scale: 2.5,),
+                                              ),
+                                            ),
+                                          ),*/
                                           Expanded(
                                             child: Container(
                                               height: height * 0.04,
@@ -687,7 +723,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                                   enabled: false,
                                                   textAlign: TextAlign.center,
                                                   textAlignVertical:
-                                                      TextAlignVertical.center,
+                                                  TextAlignVertical.center,
                                                   decoration: InputDecoration(
                                                     hintText: boxDetails
                                                         .orders[index]
@@ -696,24 +732,47 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                                       fontSize: 13,
                                                       color: themeColor1,
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                      FontWeight.w500,
+                                                      fontFamily: fontMedium,
                                                     ),
                                                     contentPadding:
-                                                        EdgeInsets.all(2),
+                                                    EdgeInsets.all(2),
                                                     border: OutlineInputBorder(
                                                       borderSide:
-                                                          BorderSide.none,
+                                                      BorderSide.none,
                                                     ),
                                                   ),
                                                   style: TextStyle(
                                                     fontSize: 13,
                                                     color: themeColor1,
                                                     fontWeight: FontWeight.w500,
+                                                    fontFamily: fontMedium,
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
+                                          /* Expanded(
+                                            flex: 2,
+                                            child: InkWell(
+                                              onTap: (){
+                                                if( fulldeliveryDetails[index].quantity < initialCount[index]){
+                                                  setState(() {
+                                                    fulldeliveryDetails[index].quantity++;
+                                                    fulldeliveryDetails[index].itemcountController.text=fulldeliveryDetails[index].quantity.toString();
+                                                    fulldeliveryDetails[index].itemtotal= fulldeliveryDetails[index].quantity* fulldeliveryDetails[index].rate;
+                                                  });
+                                                }
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.only(topRight: Radius.circular(5),bottomRight: Radius.circular(5)),
+                                                ),
+                                                height: height*0.04,
+                                                //child: Image.asset('assets/icons/plus.png',scale: 2.5,),
+                                              ),
+                                            ),
+                                          ),*/
                                         ],
                                       ),
                                     ),
@@ -726,9 +785,9 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                     child: Container(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        MainAxisAlignment.start,
                                         children: [
                                           VariableText(
                                             text: boxDetails
@@ -757,9 +816,9 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                     child: Container(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        MainAxisAlignment.start,
                                         children: [
                                           VariableText(
                                             text: 'Total',
@@ -772,7 +831,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                           ),
                                           VariableText(
                                             text:
-                                                boxDetails.orders[index].amount,
+                                            boxDetails.orders[index].amount,
                                             fontsize: 12,
                                             fontcolor: themeColor1,
                                             weight: FontWeight.w700,
@@ -809,7 +868,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                       VariableText(
                         //text:'Rs $subtotal',
                         text:
-                            'Rs ${f.format(double.parse(boxDetails.totalAmount.toString()))}', ///////////
+                        'Rs ${f.format(double.parse(boxDetails.totalAmount.toString()))}', ///////////
                         fontsize: 14, fontcolor: themeColor1,
                         weight: FontWeight.w400,
                       ),
@@ -823,7 +882,6 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           setState(() {
                             isLoading2 = true;
                           });
-                          setLoading(true);
                           List<String> tempContact = [];
                           final userData =
                           Provider.of<UserModel>(context, listen: false);
@@ -836,35 +894,35 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                 widget.shopDetails.customerContactNumber
                                     .length));
                           }
-                          if (widget.shopDetails.customerContactNumber2 !=
-                              null) {
-                            tempContact
-                                .add(widget.shopDetails.customerContactNumber2);
-                          } else {
-                            //tempContact.add('+923340243440');
-                          }
+                          // if (widget.shopDetails.customerContactNumber2 !=
+                          //     null) {
+                          //   tempContact
+                          //       .add(widget.shopDetails.customerContactNumber2);
+                          // } else {
+                          //   //tempContact.add('+923340243440');
+                          // }
+                          print(tempContact);
                           String msgPin = '';
                           var rng = Random();
                           for (var i = 0; i < 4; i++) {
                             msgPin += rng.nextInt(9).toString();
                           }
                           print(msgPin);
+                          String msgData = 'Use $msgPin to confirm goods receive of Rs ${boxDetails.totalAmount} from ${userData.userName} %26 Download app https://bit.ly/38uffP8';
+                          msgData += ' ID: ${tempContact[0]} Pass: 555';
                           //String msgData = "آپ نے ہمارے نمائندے ${userData.userName} کو $totalAmount کا آرڈر دیا ہے۔\nشکریہ۔";
-                          String msgData =
-                              "آپ نے ہمارے نمائندے ${userData
-                              .userName} سے ${boxDetails
-                              .totalAmount} روپے کا سامان لیا ہے۔";
-                          msgData += '\n';
-                          msgData +=
-                          'آگر یہ رقم درست ہے تو کنفرمیش کے لئے $msgPin ہمارے نمائندے کو بتا دیجئے۔';
-                          msgData += '\n';
-                          msgData +=
-                          'آگر یہ رقم درست نہیں تو ہمارے نمائندے کو نہیں بتاۂے۔';
-                          msgData += '\n';
-                          msgData += 'شکریہ۔';
-
-                          var response = await OnlineDataBase.sendTextMultiple(
-                              tempContact, msgData);
+                          // String msgData =
+                          //     "آپ نے ہمارے نمائندے ${userData.userName} سے ${boxDetails.totalAmount} روپے کا سامان لیا ہے۔";
+                          // msgData += '\n';
+                          // msgData +=
+                          //     'آگر یہ رقم درست ہے تو کنفرمیش کے لئے $msgPin ہمارے نمائندے کو بتا دیجئے۔';
+                          // msgData += '\n';
+                          // msgData +=
+                          //     'آگر یہ رقم درست نہیں تو ہمارے نمائندے کو نہیں بتاۂے۔';
+                          // msgData += '\n';
+                          // msgData += 'شکریہ۔';
+                          var response = await OnlineDataBase.sendText(
+                              tempContact[0], msgData);
                           if (response.statusCode == 200) {
                             setState(() {
                               isLoading2 = false;
@@ -872,57 +930,52 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) =>
-                                      MessagePinScreen(
-                                        pin: msgPin,
-                                        contactNumbers: tempContact,
-                                        onSuccess: () async {
-                                          print("@@@@@@@@@@@@@");
+                                  builder: (_) => PaymentPin(
+                                    pin: msgPin,
+                                    contactNumbers: tempContact,
+                                    onSuccess: () async {
+                                      setState(() {
+                                        isLoading2 = true;
+                                      });
 
-                                          setState(() {
-                                            isLoading2 = true;
-                                          });
+                                      var response = await OnlineDataBase
+                                          .postBoxDeliverDetails(
+                                          boxDetails: boxDetails,
+                                          lat: widget.lat.toString(),
+                                          long: widget.long.toString(),
+                                          customerCode: widget
+                                              .shopDetails.customerCode);
+                                      print("Post box Response is: " +
+                                          response.statusCode.toString());
+                                      if (response.statusCode == 200) {
+                                        var data = jsonDecode(
+                                            utf8.decode(response.bodyBytes));
+                                        print("Post box Response is: " +
+                                            data.toString());
+                                        String msgData = "Thankyou, you have receive goods of Rs ${boxDetails.totalAmount} from ${userData.userName} %26 Download app https://bit.ly/38uffP8";
+                                        msgData+= " ID: ${tempContact[0]} Pass: 555";
+                                        //     "آپ ${boxDetails.totalAmount} روپے کا سامان لے چکے ہیں۔ شکریہ۔";
 
-                                          var response = await OnlineDataBase
-                                              .postBoxDeliverDetails(
-                                              boxDetails: boxDetails,
-                                              lat: widget.lat.toString(),
-                                              long: widget.long.toString(),
-                                              customerCode: widget
-                                                  .shopDetails.customerCode);
-                                          print("Post box Response is: " +
-                                              response.statusCode.toString());
-                                          if (response.statusCode == 200) {
-                                            var data = jsonDecode(
-                                                utf8.decode(
-                                                    response.bodyBytes));
-                                            print("Post box Response is: " +
-                                                data.toString());
-                                            String msgData =
-                                                "آپ ${boxDetails
-                                                .totalAmount} روپے کا سامان لے چکے ہیں۔ شکریہ۔";
-
-                                            var responseMsg =
-                                            await OnlineDataBase
-                                                .sendTextMultiple(
-                                                tempContact, msgData);
-                                            if (responseMsg.statusCode == 200) {
-                                              print("Message sent!!!!!");
-                                            }
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        SucessFullyDelieveredOrderScreen(
-                                                          shopDetails:
-                                                          widget.shopDetails,
-                                                          lat: widget.lat,
-                                                          long: widget.long,
-                                                        )));
-                                          }
-                                          //setLoading(false);
-                                        },
-                                      ),
+                                        var responseMsg = await OnlineDataBase
+                                            .sendText(
+                                            tempContact[0], msgData);
+                                        if (responseMsg.statusCode == 200) {
+                                          print("Message sent!!!!!");
+                                        }
+                                        await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    SucessFullyDelieveredOrderScreen(
+                                                      shopDetails:
+                                                      widget.shopDetails,
+                                                      lat: widget.lat,
+                                                      long: widget.long,
+                                                    )));
+                                      }
+                                      //setLoading(false);
+                                    },
+                                  ),
                                 ));
                           } else {
                             setState(() {
@@ -938,7 +991,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           });
                           print('exception is: ' + e.toString());
                           Fluttertoast.showToast(
-                              msg: e.toString(),
+                              msg: "Something went wrong, Try again later",
                               toastLength: Toast.LENGTH_SHORT,
                               backgroundColor: Colors.black87,
                               textColor: Colors.white,
@@ -956,11 +1009,11 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                         child: isLoading2
                             ? loader()
                             : VariableText(
-                                text: 'DELIVER',
-                                weight: FontWeight.w700,
-                                fontsize: 15,
-                                fontcolor: themeColor2,
-                              ),
+                          text: 'DELIVER',
+                          weight: FontWeight.w700,
+                          fontsize: 15,
+                          fontcolor: themeColor2,
+                        ),
                       ),
                     ),
                   ),
@@ -1407,10 +1460,11 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                   borderRadius: BorderRadius.circular(5),
                   child: LayoutBuilder(
                     builder: (_, constraints) => Image.network(
-                       // imageurl.toString() == "No Image" || imageurl == null ?
+                        // imageurl.toString() == "No Image" || imageurl == null ?
                         "https://i.stack.imgur.com/y9DpT.jpg"
-                          //  : imageurl.split('{"')[1].split('"}')[0],
-                        ,fit: BoxFit.fill, loadingBuilder: (BuildContext context,
+                        //  : imageurl.split('{"')[1].split('"}')[0],
+                        ,
+                        fit: BoxFit.fill, loadingBuilder: (BuildContext context,
                             Widget child, ImageChunkEvent loadingProgress) {
                       if (loadingProgress == null) return child;
                       return Center(
