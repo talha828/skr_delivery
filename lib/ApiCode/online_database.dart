@@ -449,5 +449,12 @@ class OnlineDataBase {
     print(response.statusCode.toString());
     return response;
   }
+  static Future<dynamic> postEmployeeVisit({String customerCode,String purpose,String lat,String long}) async {
+    var url =Uri.parse(directory+'postempvisitlog?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customerCode&pin_loc_code=&pin_longitude='+'$long'+'&pin_latitude='+'$lat'+'&pin_purpose=$purpose&pin_photo');
+    print('post employee url is'+url.toString());
+    final response = await http.get(url);
+    return response;
+  }
+
 
 }

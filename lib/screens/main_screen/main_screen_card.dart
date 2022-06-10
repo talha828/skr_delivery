@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:location/location.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:provider/provider.dart';
+import 'package:skr_delivery/ApiCode/online_database.dart';
+import 'package:skr_delivery/model/customerModel.dart';
 import 'package:skr_delivery/model/retrun_cart_model.dart';
 import 'package:skr_delivery/screens/check-in/checkin_screen.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
@@ -64,7 +69,6 @@ class _MainScreenCardsState extends State<MainScreenCards> {
       selectedIndex = i;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -474,17 +478,44 @@ class _MainScreenCardsState extends State<MainScreenCards> {
                     //     long: templong.toString(),
                     //     customerData: widget.customerData);
                     if (widget.shopAssigned == "Yes") {
-                      Provider.of<RetrunCartModel>(context, listen: false)
-                          .retruncreateCart();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CheckIn(
-                                    code: widget.code,
-                                    name: widget.shopName,
-                                    image: widget.image,
-                                    customerData: widget.customerData,
-                                  )));
+                      Location location = new Location();
+                      var _location = await location.getLocation();
+                      var response = await OnlineDataBase.postEmployeeVisit(
+                          customerCode: widget.code,
+                          purpose: 'Check In',
+                          long: _location.longitude.toString(),
+                          lat: _location.latitude.toString());
+                      print("Response is" + response.statusCode.toString());
+                      if (response.statusCode == 200) {
+                        var data = jsonDecode(utf8.decode(response.bodyBytes));
+                        print("data is" + data.toString());
+                        Fluttertoast.showToast(
+                            msg: 'Check In Successfully',
+                            toastLength: Toast.LENGTH_SHORT,
+                            backgroundColor: Colors.black87,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        Provider.of<RetrunCartModel>(context, listen: false)
+                            .retruncreateCart();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CheckIn(
+                                      code: widget.code,
+                                      name: widget.shopName,
+                                      image: widget.image,
+                                      customerData: widget.customerData,
+                                    )));
+                      } else {
+                        print("data is" + response.statusCode.toString());
+
+                        Fluttertoast.showToast(
+                            msg: 'Some thing went wrong',
+                            toastLength: Toast.LENGTH_SHORT,
+                            backgroundColor: Colors.black87,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      }
                     } else {
                       Fluttertoast.showToast(
                           msg: 'Shop not Assigned',
