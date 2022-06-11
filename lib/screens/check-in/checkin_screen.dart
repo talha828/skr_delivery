@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:provider/provider.dart';
+import 'package:skr_delivery/model/cart_model.dart';
 import 'package:skr_delivery/model/customerModel.dart';
 import 'package:skr_delivery/model/product_model.dart';
 import 'package:skr_delivery/model/retrun_cart_model.dart';
@@ -14,6 +15,7 @@ import 'package:skr_delivery/screens/DeliveryScreen/succesflly_delieverd_order_s
 import 'package:skr_delivery/screens/PaymentScreen/payment_screen.dart';
 import 'package:skr_delivery/screens/RetrunScreen/reurn_screen.dart';
 import 'package:skr_delivery/screens/check-in/wallet_card.dart';
+import 'package:skr_delivery/screens/main_screen/main_screen.dart';
 import 'package:skr_delivery/screens/widget/constant.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart' as loc;
@@ -22,11 +24,13 @@ import '../../ApiCode/online_database.dart';
 import 'customer_info_card.dart';
 
 class CheckIn extends StatefulWidget {
-  CheckIn({this.code,this.name,this.image,this.customerData});
+  CheckIn({this.code,this.name,this.image,this.customerData,this.lat,this.long});
   final code;
   final name;
   final image;
   final customerData;
+  final lat;
+  final long;
   @override
   State<CheckIn> createState() => _CheckInState();
 }
@@ -155,6 +159,56 @@ class _CheckInState extends State<CheckIn> {
           fontSize: 16.0);
     }
   }
+  void PostEmployeeVisit(
+      {String customerCode,
+        String purpose,
+        String lat,
+        String long,
+        CustomerModel customerData}) async {
+    try {
+      setLoading(true);
+      var response = await OnlineDataBase.postEmployeeVisit(
+          customerCode: customerCode, purpose: purpose, long: long, lat: lat);
+      print("Response is" + response.statusCode.toString());
+      if (response.statusCode == 200) {
+        ;
+        Provider.of<CartModel>(context, listen: false).clearCart();
+        Provider.of<RetrunCartModel>(context, listen: false).retrunclearCart();
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        print("data is" + data.toString());
+        Fluttertoast.showToast(
+            msg: 'Check Out Successfully',
+            toastLength: Toast.LENGTH_SHORT,
+            backgroundColor: Colors.black87,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        setLoading(false);
+        //Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => MainScreen()));
+      } else {
+        setLoading(false);
+        print("data is" + response.statusCode.toString());
+
+        Fluttertoast.showToast(
+            msg: 'Some thing went wrong',
+            toastLength: Toast.LENGTH_SHORT,
+            backgroundColor: Colors.black87,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } catch (e, stack) {
+      setLoading(false);
+      print('exception is' + e.toString());
+
+      Fluttertoast.showToast(
+          msg: "Something went wrong try again letter",
+          toastLength: Toast.LENGTH_SHORT,
+          backgroundColor: Colors.black87,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
   @override
   void initState() {
     getUser();
@@ -175,42 +229,57 @@ class _CheckInState extends State<CheckIn> {
     var height = MediaQuery.of(context).size.height;
     var returncartData =
         Provider.of<RetrunCartModel>(context, listen: true).returncartItemName;
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.arrow_back,),onPressed: ()=>Navigator.pop(context),),
-        title: Text("Check-In"),
-        backgroundColor: themeColor1,
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CustomerInfo(height: height,code: widget.code,name: widget.name,image:widget.image,lat: "123",long: "456",location: widget.customerData.customerAddress.toString(),shopDetails: widget.customerData,),
-              CustomerWallet(height: height, f: f,walletCapacity: walletCapacity,useBalance: usedBalance,availableBalances: availableBalance,),
-              SizedBox(height: 20,),
-              CheckInButton(image: "assets/icons/delivery.png",text: "Delivery",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,shopDetails: userDetails,))),),
-              CheckInButton(image: "assets/icons/payment.png",text: "Payment",onTap: ()=>
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.INFO,
-                animType: AnimType.BOTTOMSLIDE,
-                title: 'No access',
-                btnOkOnPress: () {},
-              )..show(),
-                  //Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,customerData: widget.customerData,))),
-              ),
-              CheckInButton(image: "assets/icons/exchange.png",text: "Return",onTap: ()=>
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.INFO,
-                animType: AnimType.BOTTOMSLIDE,
-                title: 'No access',
-                btnOkOnPress: () {},
-              )..show(),
-                 // Navigator.push(context, MaterialPageRoute(builder: (context)=>ReturnScreen(returncartData:returncartData,shopDetails: widget.customerData,long:userLatLng.longitude ,lat:userLatLng.latitude,product: product,))),
-              ),
-            ],
+    return WillPopScope(
+      onWillPop: (){
+        PostEmployeeVisit(
+            customerCode: widget.customerData.customerCode,
+            purpose: 'Check out',
+            lat: widget.lat.toString(),
+            long: widget.long.toString(),
+            customerData: widget.customerData);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(icon: Icon(Icons.arrow_back,),onPressed: ()=>PostEmployeeVisit(
+              customerCode: widget.customerData.customerCode,
+              purpose: 'Check out',
+              lat: widget.lat.toString(),
+              long: widget.long.toString(),
+              customerData: widget.customerData),),
+          title: Text("Check-In"),
+          backgroundColor: themeColor1,
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                CustomerInfo(height: height,code: widget.code,name: widget.name,image:widget.image,lat: "123",long: "456",location: widget.customerData.customerAddress.toString(),shopDetails: widget.customerData,),
+                CustomerWallet(height: height, f: f,walletCapacity: walletCapacity,useBalance: usedBalance,availableBalances: availableBalance,),
+                SizedBox(height: 20,),
+                CheckInButton(image: "assets/icons/delivery.png",text: "Delivery",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,shopDetails: userDetails,))),),
+                CheckInButton(image: "assets/icons/payment.png",text: "Payment",onTap: ()=>
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.INFO,
+                  animType: AnimType.BOTTOMSLIDE,
+                  title: 'No access',
+                  btnOkOnPress: () {},
+                )..show(),
+                    //Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentScreen(long:userLatLng.longitude ,lat:userLatLng.latitude,customerData: widget.customerData,))),
+                ),
+                CheckInButton(image: "assets/icons/exchange.png",text: "Return",onTap: ()=>
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.INFO,
+                  animType: AnimType.BOTTOMSLIDE,
+                  title: 'No access',
+                  btnOkOnPress: () {},
+                )..show(),
+                   // Navigator.push(context, MaterialPageRoute(builder: (context)=>ReturnScreen(returncartData:returncartData,shopDetails: widget.customerData,long:userLatLng.longitude ,lat:userLatLng.latitude,product: product,))),
+                ),
+              ],
+            ),
           ),
         ),
       ),
