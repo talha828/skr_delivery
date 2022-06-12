@@ -11,9 +11,6 @@ import 'package:skr_delivery/model/customerModel.dart';
 import 'package:skr_delivery/model/product_model.dart';
 import 'package:skr_delivery/model/retrun_cart_model.dart';
 import 'package:skr_delivery/screens/DeliveryScreen/delivery_screen.dart';
-import 'package:skr_delivery/screens/DeliveryScreen/succesflly_delieverd_order_screen.dart';
-import 'package:skr_delivery/screens/PaymentScreen/payment_screen.dart';
-import 'package:skr_delivery/screens/RetrunScreen/reurn_screen.dart';
 import 'package:skr_delivery/screens/check-in/wallet_card.dart';
 import 'package:skr_delivery/screens/main_screen/main_screen.dart';
 import 'package:skr_delivery/screens/widget/constant.dart';
@@ -24,13 +21,11 @@ import '../../ApiCode/online_database.dart';
 import 'customer_info_card.dart';
 
 class CheckIn extends StatefulWidget {
-  CheckIn({this.code,this.name,this.image,this.customerData,this.lat,this.long});
+  CheckIn({this.code,this.name,this.image,this.customerData});
   final code;
   final name;
   final image;
   final customerData;
-  final lat;
-  final long;
   @override
   State<CheckIn> createState() => _CheckInState();
 }
@@ -230,22 +225,25 @@ class _CheckInState extends State<CheckIn> {
     var returncartData =
         Provider.of<RetrunCartModel>(context, listen: true).returncartItemName;
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: ()async{
+        var _location = await location.getLocation();
         PostEmployeeVisit(
             customerCode: widget.customerData.customerCode,
             purpose: 'Check out',
-            lat: widget.lat.toString(),
-            long: widget.long.toString(),
+            lat: _location.latitude.toString(),
+            long: _location.longitude.toString(),
             customerData: widget.customerData);
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(icon: Icon(Icons.arrow_back,),onPressed: ()=>PostEmployeeVisit(
+          leading: IconButton(icon: Icon(Icons.arrow_back,),onPressed: ()async{
+            var _location = await location.getLocation();
+            PostEmployeeVisit(
               customerCode: widget.customerData.customerCode,
               purpose: 'Check out',
-              lat: widget.lat.toString(),
-              long: widget.long.toString(),
-              customerData: widget.customerData),),
+              lat: _location.latitude.toString(),
+              long: _location.longitude.toString(),
+              customerData: widget.customerData);}),
           title: Text("Check-In"),
           backgroundColor: themeColor1,
         ),
