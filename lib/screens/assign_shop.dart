@@ -100,9 +100,7 @@ class _AssignShopState extends State<AssignShop> {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
         for (var item in data["results"]) {
           if (item['LATITUDE'] != null &&
-              item['LONGITUDE'] != null &&
-              item['LATITUDE'].toString().length > 2 &&
-              item['LONGITUDE'].toString().length > 2) {
+              item['LONGITUDE'] != null) {
             double dist = calculateDistance(Coordinates(
                 double.parse(item['LATITUDE'].toString()),
                 double.parse(item['LONGITUDE'].toString())));

@@ -68,27 +68,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1034325960788-9p5hp4hvfthgnann6stfdipb1qobvjfj.apps.googleusercontent.com",
+          "client_id": "1034325960788-k5nslam623g5dvfep8se9n39emc49ajk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.suqexpress.delivery",
-            "certificate_hash": "8b304227f1c9fdc6c1183b134f713f013ec6a907"
-          }
-        },
-        {
-          "client_id": "1034325960788-fohkno0i40nckmgt61kb0tltvd6k1pqa.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.suqexpress.delivery",
-            "certificate_hash": "66c3390a6c6a05b78df6691762baad7042ab8d4f"
-          }
-        },
-        {
-          "client_id": "1034325960788-mvp1v73g5cask8pee53k584ivogrlqhu.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.suqexpress.delivery",
-            "certificate_hash": "f8edfae9247e798aad4f9d3a4d332ba21cadb43a"
+            "certificate_hash": "7e290a7f956fa9ee43341196286470dc8386c144"
           }
         },
         {
