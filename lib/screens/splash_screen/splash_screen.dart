@@ -1,6 +1,8 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:http/http.dart' as http;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -35,7 +37,29 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   AnimationController _controller;
   static const int _duration = 2;
 
-
+  getVersion() async {
+    Uri url = Uri.parse("https://erp.suqexpress.com/api/appversion/3");
+    var response = await http.get(url);
+    var data = jsonDecode(response.body);
+    if (data['data'] == "04072022") {
+      checkIntetrnetConnectivtiy();
+    } else {
+      AwesomeDialog(
+          context: context,
+          dialogType: DialogType.INFO_REVERSED,
+          animType: AnimType.BOTTOMSLIDE,
+          title: "Up-date your app",
+          desc:
+          "New version is available on play store. Please update your app",
+          btnOkText: "Update Now",
+          btnCancelText: "Ok",
+          dismissOnBackKeyPress: false,
+          dismissOnTouchOutside: false,
+          btnOkOnPress: () async {
+            getVersion();
+          }).show();
+    }
+  }
   checkUser()async {
     _controller = AnimationController(
       duration: Duration(seconds: _duration),
@@ -165,7 +189,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
     initFirebase();
-    checkIntetrnetConnectivtiy();
+    getVersion();
   }
   @override
   Widget build(BuildContext context) {

@@ -1078,7 +1078,12 @@ class _EditShopScreenState extends State<EditShopScreen> {
               : sel_areas.toString(),
           city: sel_cities == null
               ? widget.shopData.customerCityCode
-              : sel_cities.toString());
+              : sel_cities.toString()).catchError((e)=>Fluttertoast.showToast(
+          msg: "Error: " +e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          backgroundColor: Colors.black87,
+          textColor: Colors.white,
+          fontSize: 16.0));
       print("Response is: " + response.statusCode.toString());
       if (response.statusCode == 200) {
         sucessfullyEditShop();

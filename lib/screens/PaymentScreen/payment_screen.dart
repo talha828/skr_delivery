@@ -261,6 +261,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                  context,
                                                  MaterialPageRoute(
                                                      builder: (_) => PaymentPin(
+                                                       total:totalAmount ,
+                                                       userName:userData.userName ,
+                                                       customer: widget.customerData,
                                                        pin: msgPin,
                                                        contactNumbers: tempContact,
                                                        onSuccess: (){
@@ -419,7 +422,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       } else {
         setLoading(false);
         Fluttertoast.showToast(
-          msg: "Something went wrong try again later",
+          msg: "Error: " +e.toString(),
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: Colors.black87,
           textColor: Colors.white,
@@ -429,7 +432,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     } catch (e,stack) {
       setLoading(false);
       Fluttertoast.showToast(
-        msg: "Something went wrong try again later",
+        msg: "Error: " +e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         backgroundColor: Colors.black87,
         textColor: Colors.white,

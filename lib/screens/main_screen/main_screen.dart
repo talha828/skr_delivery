@@ -264,7 +264,8 @@ class _MainScreenState extends State<MainScreen> {
   //   });
   // }
   getWalletStatus() async {
-    var response2 = await OnlineDataBase.getWalletStatus();
+    var response2 = await OnlineDataBase.getWalletStatus().catchError((e)=>Fluttertoast.showToast(
+        msg: "Error: " +e.toString(), toastLength: Toast.LENGTH_LONG));
     if (response2.statusCode == 200) {
       var data2 = jsonDecode(utf8.decode(response2.bodyBytes));
       print("get wallet data is: " + data2.toString());

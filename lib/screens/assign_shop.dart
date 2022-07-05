@@ -134,7 +134,7 @@ class _AssignShopState extends State<AssignShop> {
       setLoading(false);
       runningAPI = false;
       Fluttertoast.showToast(
-          msg: "Something went wrong try again later",
+          msg: "Error: " +e.toString(),
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: Colors.black87,
           textColor: Colors.white,

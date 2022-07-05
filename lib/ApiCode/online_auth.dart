@@ -4,15 +4,14 @@ const String Server="http://api.visionsoft-pk.com:8181/ords/skr2/";
 const String directory=Server+"app/";
 class Auth{
   static Future<dynamic> signIn2(String phoneno,String password) async {
-    var url=Uri.parse(directory+'getlogin?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneno&pin_password=$password&pin_version=200622');
+    var url=Uri.parse(directory+'getlogin?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneno&pin_password=$password&pin_version_check=N');
     final response = await http.get(url);
     return response;
   }
   static Future<dynamic> forgetPassword(String phoneno,String newpassword) async {
     var url = Uri.parse(directory+'postforgotpassword?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneno&pin_newpassword=$newpassword');
     print('link is is'+url.toString());
-    final response = await http.get(
-        url);
+    final response = await http.get(url);
     return response;
   }
 }

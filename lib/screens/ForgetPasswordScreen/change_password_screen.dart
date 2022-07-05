@@ -313,7 +313,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       print('exception is' + e.toString());
       setLoading(false);
       Fluttertoast.showToast(
-          msg: "Something went wrong try again letter",
+          msg: "Error: " +e.toString(),
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: Colors.black87,
           textColor: Colors.white,

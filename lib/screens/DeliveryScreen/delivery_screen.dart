@@ -931,6 +931,9 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => PaymentPin(
+                                    total:boxDetails.totalAmount ,
+                                    userName:userData.userName ,
+                                    customer: widget.shopDetails,
                                     pin: msgPin,
                                     contactNumbers: tempContact,
                                     onSuccess: () async {
@@ -991,7 +994,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           });
                           print('exception is: ' + e.toString());
                           Fluttertoast.showToast(
-                              msg: "Something went wrong, Try again later",
+                              msg: "Error: " +e.toString(),
                               toastLength: Toast.LENGTH_SHORT,
                               backgroundColor: Colors.black87,
                               textColor: Colors.white,

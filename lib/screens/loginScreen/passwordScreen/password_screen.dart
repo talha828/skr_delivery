@@ -97,7 +97,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
       loading = true;
     });
     if (controller.text != null) {
-      var response = await Auth.signIn2(widget.phoneNumber, controller.text);
+      var response = await Auth.signIn2(widget.phoneNumber, controller.text).catchError((e)=>print("error: $e"));
       if (response.statusCode == 200) {
         //TODO got model extract data
         var data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -196,10 +196,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                     alignment: Alignment.center,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Image.asset(
-                        "assets/logo.png",
-                        scale: 3,
-                      ),
+                      child: Image.asset("assets/logo.png", scale: 3,),
                     )),
                 Text(
                   "Login Account",
