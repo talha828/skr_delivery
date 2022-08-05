@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:skr_delivery/model/customerModel.dart';
 import 'package:skr_delivery/model/user_model.dart';
 import 'package:skr_delivery/screens/PaymentScreen/payment_using_checque.dart';
 import 'package:skr_delivery/screens/PaymentScreen/pin_payment_screen.dart';
@@ -227,58 +230,76 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                         showAmount = true;
                                         setState(() {
                                         });
-                                         if (validateFields()) {
-                                           Navigator.of(context).pop();
-                                           setLoading(true);
-                                           List<String> tempContact = [];
-                                           if(widget.customerData.customerContactNumber != null){
-                                             tempContact.add(widget.customerData.customerContactNumber.substring(0, widget.customerData.customerContactNumber.length));
-                                           }
-                                           if(widget.customerData.customerContactNumber2 != null){
-                                             tempContact.add(widget.customerData.customerContactNumber2);
-                                           }else{
-                                             //tempContact.add('+923340243440');
-                                           }
-                                           String msgPin = '';
-                                           var rng = Random();
-                                           for (var i = 0; i < 4; i++) {
-                                             msgPin += rng.nextInt(9).toString();
-                                           }
-                                           print(msgPin);
-                                           //String msgData = "آپ نے ہمارے نمائندے ${userData.userName} کو $totalAmount کا آرڈر دیا ہے۔\nشکریہ۔";
-                                           String msgData = "آپ نے ہمارے نمائندے ${userData.userName} کو $totalAmount کی رقم ادا کی ہے۔";
-                                           msgData += '\n';
-                                           msgData += 'آگر یہ رقم درست ہے تو کنفرمیش کے لئے $msgPin ہمارے نمائندے کو بتا دیجئے۔';
-                                           msgData += '\n';
-                                           msgData += 'آگر یہ رقم درست نہیں تو ہمارے نمائندے کو نہیں بتاۂے۔';
-                                           msgData += '\n';
-                                           msgData += 'شکریہ۔';
-
-                                           var response = await OnlineDataBase.sendTextMultiple(tempContact, msgData);
-                                           if(response.statusCode == 200){
-                                             setLoading(false);
-                                             Navigator.push(
-                                                 context,
-                                                 MaterialPageRoute(
-                                                     builder: (_) => PaymentPin(
-                                                       total:totalAmount ,
-                                                       userName:userData.userName ,
-                                                       customer: widget.customerData,
-                                                       pin: msgPin,
-                                                       contactNumbers: tempContact,
-                                                       onSuccess: (){
-                                                         print("@@@@@@@@@@@@@");
-                                                         //setLoading(false);
-                                                         postPayment();
-                                                       },
-                                                     )
-                                                 ));
-                                           }else{
-                                             setLoading(false);
-                                             Fluttertoast.showToast(
-                                                 msg: "Code not sent, Try again",
-                                                 toastLength: Toast.LENGTH_SHORT);
-                                           }
+                                        if (validateFields()) {
+                                          Navigator.of(context).pop();
+                                          setLoading(true);
+                                          List<String> tempContact = [];
+                                          if(widget.customerData.customerContactNumber != null){
+                                            tempContact.add(widget.customerData.customerContactNumber.substring(0, widget.customerData.customerContactNumber.length));
+                                          }
+                                          // if(widget.customerData.customerContactNumber2 != null){
+                                          //   tempContact.add(widget.customerData.customerContactNumber2);
+                                          // }else{
+                                          //   //tempContact.add('+923340243440');
+                                          // }
+                                          // String msgPin = '';
+                                          // var rng = Random();
+                                          // for (var i = 0; i < 4; i++) {
+                                          //   msgPin += rng.nextInt(9).toString();
+                                          // }
+                                          // print(msgPin);
+                                          // String msgData='Use $msgPin  to confirm Rs  $totalAmount to ${userData.userName} %26 Download app https://bit.ly/38uffP8';
+                                          // msgData+= ' ID: ${tempContact[0]} Pass: 555 or Call 03330133520';
+                                          // msgData += '\n';
+                                          // msgData +=' ';
+                                          // username = userData.userName;
+                                          //String msgData = "آپ نے ہمارے نمائندے ${userData.userName} کو $totalAmount کا آرڈر دیا ہے۔\nشکریہ۔";
+                                          // String msgData = "آپ نے ہمارے نمائندے ${userData.userName} کو $totalAmount کی رقم ادا کی ہے۔";
+                                          // msgData += '\n';
+                                          // msgData += 'آگر یہ رقم درست ہے تو کنفرمیش کے لئے $msgPin ہمارے نمائندے کو بتا دیجئے۔';
+                                          // msgData += '\n';
+                                          // msgData += 'آگر یہ رقم درست نہیں تو ہمارے نمائندے کو نہیں بتاۂے۔';
+                                          // msgData += '\n';
+                                          // msgData += 'شکریہ۔';
+                                          // var response = await OnlineDatabase.sendText(tempContact[0], msgData);
+                                          var dio = new Dio();
+                                          String url = "https://erp.suqexpress.com/api/getcode";
+                                          Map<String, dynamic> map = {
+                                            "purpose": 2,
+                                            "number": tempContact.first,
+                                            "amount": totalAmount,
+                                            "customer_id":widget.customerData.customerCode,
+                                            "emp_name": userData.userName,
+                                          };
+                                          FormData formData = FormData.fromMap(map);
+                                          //TODO sms post
+                                          Response smsResponse =
+                                          await dio.post(url, data: formData);
+                                          print(smsResponse.data.toString());
+                                          if(smsResponse.statusCode == 200){
+                                            setLoading(false);
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => PaymentPin(
+                                                      userName:userData.userName,
+                                                      total: totalAmount,
+                                                      customer:widget.customerData,
+                                                      pin: smsResponse.data["code"].toString(),
+                                                      contactNumbers: tempContact,
+                                                      onSuccess: (){
+                                                        print("@@@@@@@@@@@@@");
+                                                        //setLoading(false);
+                                                        postPayment(userData,widget.customerData);
+                                                      },
+                                                    )
+                                                ));
+                                          }else{
+                                            setLoading(false);
+                                            Fluttertoast.showToast(
+                                                msg: "Code not sent, Try again",
+                                                toastLength: Toast.LENGTH_SHORT);
+                                          }
                                         }
                                         },
                                     )
@@ -386,30 +407,34 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
     return ok;
   }
-  postPayment() async {
+  postPayment(UserModel user,CustomerModel customer) async {
     try {
+      var location=await Location().getLocation();
       setLoading(true);
-      var response = await OnlineDataBase.postPayment(customerCode: widget.customerData.customerCode,lat: widget.lat.toString(),long: widget.long.toString(),amount: totalAmount,name: Name,paymentMode: '1');
+      var response = await OnlineDataBase.newpostPayment(emp_id: user.userID,customerCode: customer.customerCode,lat: location.latitude.toString(),long: location.longitude.toString(),amount: totalAmount,name: Name,paymentMode: '1');
       print("status code is" + response.statusCode.toString());
       if (response.statusCode == 200) {
-        var respnseData=jsonDecode(utf8.decode(response.bodyBytes));
-        print("response is"+respnseData['results'].toString());
+        // var respnseData=jsonDecode(utf8.decode(response.bodyBytes));
+        // print("response is"+respnseData['results'].toString());
 
         List<String> tempContact = [];
-        if(widget.customerData.customerContactNumber != null){
-          tempContact.add(widget.customerData.customerContactNumber.substring(0, widget.customerData.customerContactNumber.length));
+        if(customer.customerContactNumber != null){
+          tempContact.add(customer.customerContactNumber.substring(0, customer.customerContactNumber.length));
         }
-        if(widget.customerData.customerContactNumber2 != null){
-          tempContact.add(widget.customerData.customerContactNumber2);
-        }else{
-          //tempContact.add('+923340243440');
-        }
-        String msgData = "آپ نے $totalAmount روپے ادا کر دئے ہیں۔ شکریہ۔";
-
-        var responseMsg = await OnlineDataBase.sendTextMultiple(tempContact, msgData);
-        if(responseMsg.statusCode == 200){
-          print("Message sent!!!!!");
-        }
+        // if(widget.customerData.customerContactNumber2 != null){
+        //   tempContact.add(widget.customerData.customerContactNumber2);
+        // }else{
+        //   //tempContact.add('+923340243440');
+        // }
+        // final userData = Provider.of<UserModel>(context, listen: false);
+        // String msgData ="Thankyou for your payment of Rs $totalAmount to  ${user.userName}";
+        // msgData+= " %26 Download app https://bit.ly/38uffP8 ID: ${tempContact[0]} Pass: 555 or Call 03330133520";
+        // // String msgData = "آپ نے $totalAmount روپے ادا کر دئے ہیں۔ شکریہ۔";
+        //
+        // var responseMsg = await OnlineDatabase.sendText(tempContact[0], msgData);
+        // if(responseMsg.statusCode == 200){
+        //   print("Message sent!!!!!");
+        // }
 
         setLoading(false);
         Fluttertoast.showToast(
@@ -418,11 +443,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
             backgroundColor: Colors.black87,
             textColor: Colors.white,
             fontSize: 16.0);
-        Navigator.push(context,MaterialPageRoute(builder: (_)=>SucessFullyRecivePaymentScreen(shopDetails: widget.customerData,long: widget.long,lat: widget.lat,)));
+        Navigator.push(context,MaterialPageRoute(builder: (_)=>SucessFullyRecivePaymentScreen()));
       } else {
         setLoading(false);
         Fluttertoast.showToast(
-          msg: "Error: " +e.toString(),
+          msg: "Something went wrong try again later",
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: Colors.black87,
           textColor: Colors.white,
@@ -432,7 +457,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     } catch (e,stack) {
       setLoading(false);
       Fluttertoast.showToast(
-        msg: "Error: " +e.toString(),
+        msg: "Error: "+e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         backgroundColor: Colors.black87,
         textColor: Colors.white,

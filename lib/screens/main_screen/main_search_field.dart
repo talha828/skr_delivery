@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class MainSearchField extends StatelessWidget {
-  MainSearchField({this.onTap,this.onchange,this.enable,this.controller});
+  MainSearchField({this.onTap,this.onchange,this.enable,this.controller,this.width});
   final onTap;
   final onchange;
   final enable;
   final controller;
+  final width;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,7 +14,7 @@ class MainSearchField extends StatelessWidget {
       decoration: BoxDecoration(
           border:
           Border.all(color: Colors.grey.withOpacity(0.5), width: 1),
-          borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(5)),
       child: TextField(
         onChanged: onchange,
         controller: controller,

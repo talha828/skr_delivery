@@ -24,8 +24,8 @@ class LoginSuccessful extends StatelessWidget {
           prefs.setString('name',userName.toString());
           prefs.setString('password',password.toString());
           phoneNumber=prefs.getString('phoneno');
-          phonepass=prefs.getString('password');
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));
+          myPassword=prefs.getString('password');
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen(check:true)));
         },
         label: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

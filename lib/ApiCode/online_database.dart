@@ -15,32 +15,117 @@ int _secs = 20;
 const String _timeoutString = "Response Timed Out";
 const String _something = 'Something went wrong';
 String phoneNumber;
-String phonepass;
+String myPassword;
 String smsApiKey = '95baf232c5ccb5c760b8862c5ffac854';
 
 class OnlineDataBase {
   static Future<dynamic> getAllCustomer() async {
     String url = directory +
-        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_datatype=INFO';
+        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_datatype=INFO';
     print("url is: " + url);
     //TODO set phone number and password
     final response = await http.get(Uri.parse(url));
     return response;
   }
+  static Future<dynamic> postEmployee({String customerCode,String purpose,String lat,String long,String emp_id}) async {
+    // var url =Uri.parse(directory+'postempvisitlog?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$password&pin_cust_code=$customerCode&pin_loc_code=&pin_longitude='+'$long'+'&pin_latitude='+'$lat'+'&pin_purpose=$purpose&pin_photo');
+    //  print('post employee url is'+url.toString());
+    // final response = await http.get(url);
+    Map<String,dynamic> data={
+      "employee_id":emp_id,
+      "customer_id":customerCode,
+      "phone":phoneNumber,
+      "password":myPassword,
+      "lat":lat,
+      "long":long,
+    };
+    var dio = Dio();
+    String url='http://erp.suqexpress.com/api/checkin';
+    print(data);
+    FormData formData = new FormData.fromMap(data);
+    var response=await dio.post(url,data: formData);
+    return response;
+  }
+
   static Future<dynamic> getAssignShop() async {
     //+923163301494
     //555
     String url = directory +
-        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_datatype=DELIVERYMAN';//TODO num, pass
+        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_datatype=DELIVERYMAN';//TODO num, pass
     print("url is: " + url);
     //TODO set phone number and password
     final response = await http.get(Uri.parse(url));
     return response;
   }
+  static Future<dynamic> newpostBoxDeliverDetails({BoxModel boxDetails, int code_id,String customerCode,String amount,String emp_name,String lat, String long,emp_id}) async {
+    Map<String,dynamic> data={
+      "employee_id":emp_id,
+      "emp_name":emp_name,
+      "customer_id":customerCode,
+      "phone":phoneNumber,
+      "password":myPassword,
+      "lat":lat,
+      "long":long,
+      "box_no":boxDetails.trNumber,
+      "amount":amount,
+      "code_id":code_id,
+    };
+    var dio = Dio();
+    print(data);
+    String url="https://erp.suqexpress.com/api/deliverybox";
+    FormData formData = new FormData.fromMap(data);
+    var response=await dio.post(url,data: formData);
+    // final response = await http.post(
+    //   url,
+    // );
+
+    return response;
+  }
+  static Future<dynamic> newpostPayment({String emp_id,String customerCode, String imageUrl, String lat, String long, String paymentMode, String checkNumber, String amount, String name, String date})async{
+
+    String url="http://erp.suqexpress.com/api/collection";
+    Map<String,dynamic> cash={
+      "employee_id":emp_id,
+      "customer_id":customerCode,
+      "phone":phoneNumber,
+      "password":myPassword,
+      "lat":lat,
+      "long":long,
+      "payment_method":paymentMode,
+      "amount":amount,
+      "received_from":name,
+    };
+    Map<String,dynamic> cheque={
+      "employee_id":emp_id,
+      "customer_id":customerCode,
+      "phone":phoneNumber,
+      "password":myPassword,
+      "lat":lat,
+      "long":long,
+      "payment_method":paymentMode,
+      "amount":amount,
+      "received_from":name,
+      "cheque_no":checkNumber,
+      "cheque_date":date,
+      "cheque_image":imageUrl,
+      "create_at":0,
+    };
+    try{
+      var dio = Dio();
+      print(paymentMode=="1"?cash:cheque);
+      String url="http://erp.suqexpress.com/api/collection";
+      FormData formData = new FormData.fromMap(paymentMode=="1"?cash:cheque);
+      var response=await dio.post(url,data: formData);
+      return response;
+    }
+    catch(e){
+      print("exception in post payment api is: "+e.toString());
+    }
+  }
 
   static Future<dynamic> getImage() async {
     String url = directory +
-        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass';
+        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword';
     print("url is: " + url);
     //TODO set phone number and password
     final response = await http.get(Uri.parse(url));
@@ -49,7 +134,7 @@ class OnlineDataBase {
 
   static Future<dynamic> getTranactionDetails({String customerCode}) async {
     var url = Uri.parse(directory +
-        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customerCode&pin_datatype=CRLB');
+        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customerCode&pin_datatype=CRLB');
     print('getTranactionDetails url is: ' + url.toString());
     final response = await http.get(url);
     return response;
@@ -62,9 +147,9 @@ class OnlineDataBase {
       bool showFullDetails}) async {
     var url = Uri.parse(showFullDetails
         ? directory +
-            'gettransactions?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customercode&pin_datatype=$dataType&pin_order_no=$orderId'
+            'gettransactions?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customercode&pin_datatype=$dataType&pin_order_no=$orderId'
         : directory +
-            'gettransactions?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customercode&pin_datatype=$dataType');
+            'gettransactions?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customercode&pin_datatype=$dataType');
     print("get delivery details url is " + url.toString());
     final response = await http.get(url);
     return response;
@@ -73,7 +158,7 @@ class OnlineDataBase {
   static Future<dynamic> getBoxDeliveries(
       {String customercode, String dataType}) async {
     var url = Uri.parse(directory +
-        'getorders?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customercode&pin_datatype=$dataType');
+        'getorders?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customercode&pin_datatype=$dataType');
     print("get delivery details url is: " + url.toString());
     final response = await http.get(url);
     return response;
@@ -87,7 +172,7 @@ class OnlineDataBase {
       String orderNumber}) async {
     // var url =Uri.parse(directory+ 'postdelivery?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$password&pin_cust_code=$customerCode&pin_longitude=$long&pin_latitude=$lat&pin_order_no=$orderNumber&file_type=json&file_name=');
     var url = Uri.parse(directory +
-        'postdelivery?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customerCode&pin_longitude=$long&pin_latitude=$lat&pin_order_no=$orderNumber&file_type=json&file_name=');
+        'postdelivery?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customerCode&pin_longitude=$long&pin_latitude=$lat&pin_order_no=$orderNumber&file_type=json&file_name=');
     print("post delivery order url is: " + url.toString());
 
     Map<String, dynamic> postData = {"Orderitems": []};
@@ -116,7 +201,7 @@ class OnlineDataBase {
       String lat,
       String long}) async {
     var url = Uri.parse(directory +
-        'postboxdelivery?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customerCode&pin_longitude=$long&pin_latitude=$lat&pin_box_tr=${boxDetails.trNumber}');
+        'postboxdelivery?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customerCode&pin_longitude=$long&pin_latitude=$lat&pin_box_tr=${boxDetails.trNumber}');
     print("post box delivery url is: " + url.toString());
 
     final response = await http.post(
@@ -139,9 +224,9 @@ class OnlineDataBase {
       String date}) {
     String url = paymentMode == '1'
         ? directory +
-            'postcollection?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customerCode&pin_longitude=$long&pin_latitude=$lat&pin_pay_mode=$paymentMode&pin_cheq_date=&pin_amount=$amount&pin_rcvd_from=$name&file_type&file_name'
+            'postcollection?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customerCode&pin_longitude=$long&pin_latitude=$lat&pin_pay_mode=$paymentMode&pin_cheq_date=&pin_amount=$amount&pin_rcvd_from=$name&file_type&file_name'
         : directory +
-            'postcollection?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customerCode&pin_image_url=${imageUrl}&pin_longitude=$long&pin_latitude=$lat&pin_pay_mode=$paymentMode&pin_cheq=$checkNumber&pin_cheq_date=$date&pin_amount=$amount&pin_rcvd_from=$name&file_type&file_name';
+            'postcollection?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customerCode&pin_image_url=${imageUrl}&pin_longitude=$long&pin_latitude=$lat&pin_pay_mode=$paymentMode&pin_cheq=$checkNumber&pin_cheq_date=$date&pin_amount=$amount&pin_rcvd_from=$name&file_type&file_name';
 
     print("post payment method url is: " + url);
     try {
@@ -182,7 +267,7 @@ class OnlineDataBase {
       String lat,
       String long}) async {
     var url = Uri.parse(directory +
-        'postsalesreturn?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customerCode&pin_longitude=$long&pin_latitude=$lat&file_type=json&file_name=');
+        'postsalesreturn?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customerCode&pin_longitude=$long&pin_latitude=$lat&file_type=json&file_name=');
     print("post Sales return url is" + url.toString());
 
     Map<String, dynamic> postData = {"Orderitems": []};
@@ -245,7 +330,7 @@ class OnlineDataBase {
 
   static Future<dynamic> getAllPrdouct() async {
     var url = Uri.parse(directory +
-        'getprodprice?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=pin_cust_code');
+        'getprodprice?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=pin_cust_code');
     print("get product url is " + url.toString());
     final response = await http.get(
         // Uri.parse(directory+'getproducts?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$password&pin_cust_code=pin_cust_code'));
@@ -255,7 +340,7 @@ class OnlineDataBase {
 
   static Future<dynamic> getSingleCustomer(String custCode) async {
     String url = directory +
-        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_datatype=&pin_cust_code=$custCode';
+        'getcustomers?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_datatype=&pin_cust_code=$custCode';
     print("url is: " + url);
     final response = await http.get(Uri.parse(url));
     return response;
@@ -264,7 +349,7 @@ class OnlineDataBase {
   static Future<List<City>> getAllCities({Function task}) async {
     List<City> cities;
     var url = Uri.parse(directory +
-        'getcities?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_city_code=');
+        'getcities?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_city_code=');
     print("get city url: " + url.toString());
     await http.get(url).then((response) {
       print(response.statusCode.toString());
@@ -309,7 +394,7 @@ class OnlineDataBase {
   static Future<List<PartyCategories>> getPartyCategories() async {
     List<PartyCategories> partyCategories;
     var url = Uri.parse(directory +
-        'getpartycategories?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cat_code=');
+        'getpartycategories?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cat_code=');
     print("get getPartyCategories url: " + url.toString());
     await http.get(url).then((response) {
       if (response.statusCode == 200) {
@@ -346,7 +431,7 @@ class OnlineDataBase {
   static Future<List<Area>> getAreaByCity(cityID) async {
     List<Area> areas;
     var url = Uri.parse(directory +
-        'getcityareas?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_city_code=$cityID');
+        'getcityareas?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_city_code=$cityID');
     print("get city url: " + url.toString());
     await http.get(url).then((response) {
       if (response.statusCode == 200) {
@@ -402,7 +487,7 @@ class OnlineDataBase {
     String area,
   }) {
     String url = directory +
-        'posteditshop?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customerCode&pin_shopname=${shopname}&pin_address=$address&pin_partycategory=$partyCategory&'
+        'posteditshop?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customerCode&pin_shopname=${shopname}&pin_address=$address&pin_partycategory=$partyCategory&'
             'pin_image_url=${imageUrl}&pin_city=${city ?? ''}&pin_mobile=${customerPhoneNo}&pin_phone1=${customerPhoneNo}&pin_phone2=$CustomerPhoneNo2&pin_ntn=1'
             '&pin_person1=$customerName&pin_person2=$customerName2&pin_longitude=$long&pin_latitude=$lat&po_cust_code&pin_area=${area ?? ''}';
     print("edit customer url is: " + url);
@@ -417,7 +502,7 @@ class OnlineDataBase {
 
   static Future<dynamic> getWalletStatus() async {
     var url = Uri.parse(directory +
-        'getwalletstatus?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass');
+        'getwalletstatus?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword');
     print("url is: " + url.toString());
     final response = await http.get(url);
     return response;
@@ -450,7 +535,7 @@ class OnlineDataBase {
     return response;
   }
   static Future<dynamic> postEmployeeVisit({String customerCode,String purpose,String lat,String long}) async {
-    var url =Uri.parse(directory+'postempvisitlog?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$phonepass&pin_cust_code=$customerCode&pin_loc_code=&pin_longitude='+'$long'+'&pin_latitude='+'$lat'+'&pin_purpose=$purpose&pin_photo');
+    var url =Uri.parse(directory+'postempvisitlog?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=$phoneNumber&pin_password=$myPassword&pin_cust_code=$customerCode&pin_loc_code=&pin_longitude='+'$long'+'&pin_latitude='+'$lat'+'&pin_purpose=$purpose&pin_photo');
     print('post employee url is'+url.toString());
     final response = await http.get(url);
     return response;

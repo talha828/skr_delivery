@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:location/location.dart';
+import 'package:provider/provider.dart';
+import 'package:skr_delivery/model/user_model.dart';
 import 'package:skr_delivery/screens/PaymentScreen/sucessfully_recived_payment_screen.dart';
 import 'package:skr_delivery/screens/loginScreen/passwordScreen/loader.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
@@ -83,9 +86,12 @@ class _PaymentUsingCheckState extends State<PaymentUsingCheck> {
       });
     }
   }
-
+  var userdata;
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      userdata=Provider.of<UserModel>(context);
+    });
     var media=MediaQuery.of(context).size;
     double height=media.height;
     double width=media.width;
@@ -624,12 +630,13 @@ class _PaymentUsingCheckState extends State<PaymentUsingCheck> {
 
   postPayment(String imageUrl) async {
     try {
+      var location =await Location().getLocation();
       setLoading(true);
-      var response = await OnlineDataBase.postPayment(customerCode: widget.customerData.customerCode, imageUrl: imageUrl,lat: widget.lat.toString(),long: widget.long.toString(),amount: amount.text,name: name.text,checkNumber: checkNumber.text,paymentMode: '2', date: startDate);
+      var response = await OnlineDataBase.newpostPayment(emp_id: userdata.userEmpolyeeNumber,customerCode: widget.customerData.customerCode, imageUrl: imageUrl,lat: location.latitude.toString(),long: location.longitude.toString(),amount: amount.text,name: name.text,checkNumber: checkNumber.text,paymentMode: '2', date: startDate);
       print("status code is: " + response.statusCode.toString());
       if (response.statusCode == 200) {
-        var respnseData=jsonDecode(utf8.decode(response.bodyBytes));
-        print("response is: "+respnseData['results'].toString());
+        // var respnseData=jsonDecode(utf8.decode(response.bodyBytes));
+        // print("response is: "+respnseData['results'].toString());
         setLoading(false);
         Fluttertoast.showToast(
             msg: "Payment Created Successfully",
@@ -637,7 +644,7 @@ class _PaymentUsingCheckState extends State<PaymentUsingCheck> {
             backgroundColor: Colors.black87,
             textColor: Colors.white,
             fontSize: 16.0);
-        Navigator.push(context,MaterialPageRoute(builder: (_)=>SucessFullyRecivePaymentScreen(shopDetails: widget.customerData,long: widget.long,lat: widget.lat,)));
+        Navigator.push(context,MaterialPageRoute(builder: (_)=>SucessFullyRecivePaymentScreen()));
       } else {
         setLoading(false);
         Fluttertoast.showToast(
@@ -651,7 +658,7 @@ class _PaymentUsingCheckState extends State<PaymentUsingCheck> {
     } catch (e,stack) {
       setLoading(false);
       Fluttertoast.showToast(
-        msg: "Error: " +e.toString(),
+        msg: "Error: "+e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         backgroundColor: Colors.black87,
         textColor: Colors.white,

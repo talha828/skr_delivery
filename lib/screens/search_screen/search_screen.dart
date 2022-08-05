@@ -150,26 +150,15 @@ class _SearchScreenState extends State<SearchScreen> {
                             horizontal: 15),
                         child: Column(
                           children: [
-                            MainScreenCards(
+                            CustomShopContainer(
+                              customerList: widget.customerModel,
                               height: height,
                               width: width,
-                              f: f,
-                              menuButton: menuButton,
-                              code: customersearchresult[index].customerCode.toString(),
-                              category: customersearchresult[index].customerCategory.toString(),
-                              shopName: customersearchresult[index].customerShopName.toString(),
-                              address: customersearchresult[index].customerAddress.toString(),
-                              name: customersearchresult[index].customerContactPersonName.toString(),
-                              phoneNo: customersearchresult[index].customerContactNumber.toString(),
-                              lastVisit: customersearchresult[index].lastVisitDay.toString(),
-                              dues: customersearchresult[index].dues.toString(),
-                              lastTrans: customersearchresult[index].lastTransDay.toString(),
-                              outstanding: customersearchresult[index].outStanding.toString(),
-                              shopAssigned: customersearchresult[index].shopAssigned,
-                              lat: customersearchresult[index].customerLatitude,
-                              long: customersearchresult[index].customerLongitude,
-                              image: "",
-                              customerData: customersearchresult[index],
+                              customerData:widget.customerModel[index],
+                              //isLoading2: isLoading2,
+                              //enableLocation: _serviceEnabled,
+                              lat: 1.0,
+                              long:1.0,
                               showLoading: (value) {
                                 setState(() {
                                   isLoading = value;

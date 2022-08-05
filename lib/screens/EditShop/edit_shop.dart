@@ -1011,7 +1011,7 @@ class _EditShopScreenState extends State<EditShopScreen> {
                               // if(userDetails.editable != null)
                               InkWell(
                                 onTap: () {
-                                  if (userDetails.editable == 'Y') editShopNew().then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen())));
+                                  if (userDetails.editable == 'Y') editShopNew().then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen(check: false,))));
                                 },
                                 child: Container(
                                   height: height * 0.06,

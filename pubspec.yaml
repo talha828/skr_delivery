@@ -50,6 +50,7 @@ dependencies:
   location_permissions: 4.0.0
   permission_handler: 6.0.0
   image_picker: ^0.6.0+9
+  shimmer: ^2.0.0
   dio: 4.0.0
   http_parser: 4.0.0
   dotted_border: ^2.0.0+1

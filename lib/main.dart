@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:skr_delivery/model/customerList.dart';
 import 'package:skr_delivery/screens/splash_screen/splash_screen.dart';
 import 'package:skr_delivery/trmpFile.dart';
 
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
           create: (_) => CartModel(),
         ),
         ChangeNotifierProvider<RetrunCartModel>(create: (_) => RetrunCartModel()),
+        ChangeNotifierProvider<CustomerList>(
+          create: (_) => CustomerList(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

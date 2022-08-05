@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:skr_delivery/model/box_model.dart';
 import 'package:skr_delivery/model/customerModel.dart';
 import 'package:skr_delivery/model/delivery_model.dart';
@@ -332,18 +335,120 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
             height: height * sizedboxvalue,
           ),
           isLoading
-              ? Container(
-                  height: 100,
-                  child: Scaffold(
-                    backgroundColor: Colors.white.withOpacity(0.5),
-                    body: Container(
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                        backgroundColor: Colors.black45,
-                        color: themeColor1,
+              ? Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            enabled: true,
+            child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                physics: ScrollPhysics(),
+                itemCount: 3,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15),
+                        child: Container(
+                          width: width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                                color: selectedIndex[index] == true
+                                    ? Color(0xffF6821F).withOpacity(0.6)
+                                    : Color(0xffffffff).withOpacity(0.6)),
+                            color: selectedIndex[index] == true
+                                ? Color(0xffFFCB9F).withOpacity(0.5)
+                                : themeColor2,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 15,
+                                horizontal: 15 / 2),
+                            child: Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: height * sizedboxvalue / 2,
+                                ),
+                                Expanded(
+                                  flex: 13,
+                                  child: Container(
+                                    height: height * 0.07,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        VariableText(
+                                          text: '',
+                                          fontsize: 14,
+                                          fontcolor: textcolorblack,
+                                          weight: FontWeight.w700,
+                                        ),
+                                        VariableText(
+                                          text: '',
+                                          fontsize: 12,
+                                          fontcolor: textcolorgrey,
+                                          weight: FontWeight.w400,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: height * sizedboxvalue,
+                                ),
+                                Container(
+                                  child: Expanded(
+                                    flex: 7,
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        height: height * 0.04,
+                                        decoration: BoxDecoration(
+                                            color: themeColor1,
+                                            borderRadius:
+                                            BorderRadius.circular(5)),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            VariableText(
+                                              text: '',
+                                              fontsize: 13,
+                                              fontcolor: themeColor2,
+                                              weight: FontWeight.w700,
+                                            ),
+                                            SizedBox(
+                                              width: height * 0.01,
+                                            ),
+                                            Image.asset(
+                                              'assets/icons/arrowright.png',
+                                              color: Colors.red,
+                                              scale: 2.5,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ))
+                      SizedBox(
+                        height: height * sizedboxvalue,
+                      ),
+                    ],
+                  );
+                }),
+          )
               : orderDetailsBlock(height, width),
         ]),
       ),
@@ -662,7 +767,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                             children: [
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   /*Expanded(
@@ -723,7 +828,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                                   enabled: false,
                                                   textAlign: TextAlign.center,
                                                   textAlignVertical:
-                                                  TextAlignVertical.center,
+                                                      TextAlignVertical.center,
                                                   decoration: InputDecoration(
                                                     hintText: boxDetails
                                                         .orders[index]
@@ -732,14 +837,14 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                                       fontSize: 13,
                                                       color: themeColor1,
                                                       fontWeight:
-                                                      FontWeight.w500,
+                                                          FontWeight.w500,
                                                       fontFamily: fontMedium,
                                                     ),
                                                     contentPadding:
-                                                    EdgeInsets.all(2),
+                                                        EdgeInsets.all(2),
                                                     border: OutlineInputBorder(
                                                       borderSide:
-                                                      BorderSide.none,
+                                                          BorderSide.none,
                                                     ),
                                                   ),
                                                   style: TextStyle(
@@ -785,9 +890,9 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                     child: Container(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                         children: [
                                           VariableText(
                                             text: boxDetails
@@ -816,9 +921,9 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                     child: Container(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                         children: [
                                           VariableText(
                                             text: 'Total',
@@ -831,7 +936,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                           ),
                                           VariableText(
                                             text:
-                                            boxDetails.orders[index].amount,
+                                                boxDetails.orders[index].amount,
                                             fontsize: 12,
                                             fontcolor: themeColor1,
                                             weight: FontWeight.w700,
@@ -868,7 +973,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                       VariableText(
                         //text:'Rs $subtotal',
                         text:
-                        'Rs ${f.format(double.parse(boxDetails.totalAmount.toString()))}', ///////////
+                            'Rs ${f.format(double.parse(boxDetails.totalAmount.toString()))}', ///////////
                         fontsize: 14, fontcolor: themeColor1,
                         weight: FontWeight.w400,
                       ),
@@ -877,6 +982,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                   SizedBox(height: height * 0.015),
                   InkWell(
                     onTap: () async {
+                      var location = await Location().getLocation();
                       if (!isLoading2) {
                         try {
                           setState(() {
@@ -884,15 +990,15 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           });
                           List<String> tempContact = [];
                           final userData =
-                          Provider.of<UserModel>(context, listen: false);
+                              Provider.of<UserModel>(context, listen: false);
                           if (widget.shopDetails.customerContactNumber !=
                               null) {
                             tempContact.add(widget
                                 .shopDetails.customerContactNumber
                                 .substring(
-                                0,
-                                widget.shopDetails.customerContactNumber
-                                    .length));
+                                    0,
+                                    widget.shopDetails.customerContactNumber
+                                        .length));
                           }
                           // if (widget.shopDetails.customerContactNumber2 !=
                           //     null) {
@@ -901,80 +1007,100 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           // } else {
                           //   //tempContact.add('+923340243440');
                           // }
-                          print(tempContact);
-                          String msgPin = '';
-                          var rng = Random();
-                          for (var i = 0; i < 4; i++) {
-                            msgPin += rng.nextInt(9).toString();
-                          }
-                          print(msgPin);
-                          String msgData = 'Use $msgPin to confirm goods receive of Rs ${boxDetails.totalAmount} from ${userData.userName} %26 Download app https://bit.ly/38uffP8';
-                          msgData += ' ID: ${tempContact[0]} Pass: 555';
-                          //String msgData = "آپ نے ہمارے نمائندے ${userData.userName} کو $totalAmount کا آرڈر دیا ہے۔\nشکریہ۔";
-                          // String msgData =
-                          //     "آپ نے ہمارے نمائندے ${userData.userName} سے ${boxDetails.totalAmount} روپے کا سامان لیا ہے۔";
-                          // msgData += '\n';
-                          // msgData +=
-                          //     'آگر یہ رقم درست ہے تو کنفرمیش کے لئے $msgPin ہمارے نمائندے کو بتا دیجئے۔';
-                          // msgData += '\n';
-                          // msgData +=
-                          //     'آگر یہ رقم درست نہیں تو ہمارے نمائندے کو نہیں بتاۂے۔';
-                          // msgData += '\n';
-                          // msgData += 'شکریہ۔';
-                          var response = await OnlineDataBase.sendText(
-                              tempContact[0], msgData);
-                          if (response.statusCode == 200) {
+                          var dio = new Dio();
+                          String url = "https://erp.suqexpress.com/api/getcode";
+                          Map<String, dynamic> map = {
+                            "purpose": 1,
+                            "number": tempContact.first,
+                            "amount":boxDetails.totalAmount,
+                            "customer_id": widget.shopDetails.customerCode,
+                            "emp_name": userData.userName,
+                          };
+                          FormData formData = FormData.fromMap(map);
+                          //TODO sms post
+                          Response smsResponse =
+                              await dio.post(url, data: formData);
+                          if (smsResponse.statusCode == 200) {
                             setState(() {
                               isLoading2 = false;
                             });
+                            print(smsResponse.data.toString());
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => PaymentPin(
-                                    total:boxDetails.totalAmount ,
-                                    userName:userData.userName ,
+                                    userName: userData.userName,
                                     customer: widget.shopDetails,
-                                    pin: msgPin,
+                                    total: boxDetails.totalAmount,
+                                    pin: smsResponse.data["code"].toString(),
                                     contactNumbers: tempContact,
                                     onSuccess: () async {
                                       setState(() {
                                         isLoading2 = true;
                                       });
+                                      //
+                                      // var response = await OnlineDataBase
+                                      //     .postBoxDeliverDetails(
+                                      //         boxDetails: boxDetails,
+                                      //         lat: widget.lat.toString(),
+                                      //         long: widget.long.toString(),
+                                      //         customerCode: widget
+                                      //             .shopDetails.customerCode);
 
                                       var response = await OnlineDataBase
-                                          .postBoxDeliverDetails(
-                                          boxDetails: boxDetails,
-                                          lat: widget.lat.toString(),
-                                          long: widget.long.toString(),
-                                          customerCode: widget
-                                              .shopDetails.customerCode);
+                                              .newpostBoxDeliverDetails(
+                                                  boxDetails: boxDetails,
+                                                  emp_id: userData.userID,
+                                                  emp_name: userData.userName,
+                                                  lat: location.latitude
+                                                      .toString(),
+                                                  code_id:
+                                                      smsResponse.data["id"],
+                                                  long: location.longitude
+                                                      .toString(),
+                                                  amount:
+                                                      boxDetails.totalAmount,
+                                                  customerCode: widget
+                                                      .shopDetails.customerCode)
+                                          .catchError((e) {
+                                        setState(() {
+                                          isLoading2 = false;
+                                        });
+                                        setLoading(false);
+                                        Navigator.pop(context);
+                                        AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.ERROR,
+                                          animType: AnimType.BOTTOMSLIDE,
+                                          title: "Something went wrong",
+                                          desc: "Error: " + e.toString(),
+                                          btnCancelText: "Ok",
+                                          dismissOnTouchOutside: false,
+                                          btnOkOnPress: () {},
+                                        )..show();
+                                      });
                                       print("Post box Response is: " +
                                           response.statusCode.toString());
                                       if (response.statusCode == 200) {
-                                        var data = jsonDecode(
-                                            utf8.decode(response.bodyBytes));
-                                        print("Post box Response is: " +
-                                            data.toString());
-                                        String msgData = "Thankyou, you have receive goods of Rs ${boxDetails.totalAmount} from ${userData.userName} %26 Download app https://bit.ly/38uffP8";
-                                        msgData+= " ID: ${tempContact[0]} Pass: 555";
-                                        //     "آپ ${boxDetails.totalAmount} روپے کا سامان لے چکے ہیں۔ شکریہ۔";
-
-                                        var responseMsg = await OnlineDataBase
-                                            .sendText(
-                                            tempContact[0], msgData);
-                                        if (responseMsg.statusCode == 200) {
-                                          print("Message sent!!!!!");
-                                        }
-                                        await Navigator.push(
+                                        // var data = jsonDecode(
+                                        //     utf8.decode(response.bodyBytes));
+                                        // print("Post box Response is: " +
+                                        //     data.toString());
+                                        // String msgData = "Thankyou, you have receive goods of Rs ${boxDetails.totalAmount} from ${userData.userName} %26 Download app https://bit.ly/38uffP8";
+                                        //     msgData+= " ID: ${tempContact[0]} Pass: 555";
+                                        // //     "آپ ${boxDetails.totalAmount} روپے کا سامان لے چکے ہیں۔ شکریہ۔";
+                                        //
+                                        // var responseMsg = await OnlineDataBase
+                                        //     .sendText(
+                                        //         tempContact[0], msgData);
+                                        // if (responseMsg.statusCode == 200) {
+                                        //   print("Message sent!!!!!");
+                                        // }
+                                        Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (_) =>
-                                                    SucessFullyDelieveredOrderScreen(
-                                                      shopDetails:
-                                                      widget.shopDetails,
-                                                      lat: widget.lat,
-                                                      long: widget.long,
-                                                    )));
+                                                    SucessFullyDelieveredOrderScreen()));
                                       }
                                       //setLoading(false);
                                     },
@@ -994,7 +1120,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           });
                           print('exception is: ' + e.toString());
                           Fluttertoast.showToast(
-                              msg: "Error: " +e.toString(),
+                              msg: "Something went wrong, Try again later",
                               toastLength: Toast.LENGTH_SHORT,
                               backgroundColor: Colors.black87,
                               textColor: Colors.white,
@@ -1012,11 +1138,11 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                         child: isLoading2
                             ? loader()
                             : VariableText(
-                          text: 'DELIVER',
-                          weight: FontWeight.w700,
-                          fontsize: 15,
-                          fontcolor: themeColor2,
-                        ),
+                                text: 'DELIVER',
+                                weight: FontWeight.w700,
+                                fontsize: 15,
+                                fontcolor: themeColor2,
+                              ),
                       ),
                     ),
                   ),

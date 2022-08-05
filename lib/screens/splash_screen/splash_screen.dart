@@ -70,9 +70,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         WidgetsFlutterBinding.ensureInitialized();
         SharedPreferences prefs = await SharedPreferences.getInstance();
         phoneNumber = prefs.getString('phoneno');
-        phonepass = prefs.getString('password');
+        myPassword = prefs.getString('password');
         print("phone no is" + phoneNumber.toString());
-        print("password is" + phonepass.toString());
+        print("password is" + myPassword.toString());
         print('check location' + _serviceEnabled.toString());
         _serviceEnabled = await location.serviceEnabled();
         if (!_serviceEnabled) {
@@ -115,13 +115,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               return;
             }
           } else {
-            if (phoneNumber != null && phonepass != null) {
-              var response = await Auth.signIn2(phoneNumber, phonepass);
+            if (phoneNumber != null && myPassword != null) {
+              var response = await Auth.signIn2(phoneNumber, myPassword);
               if (response.statusCode == 200) {
                 var data = jsonDecode(utf8.decode(response.bodyBytes));
                 Provider.of<UserModel>(context, listen: false).userSignIn(data);
                 Navigator.pushReplacement(
-                    context, SwipeLeftAnimationRoute(widget: MainScreen()));
+                    context, SwipeLeftAnimationRoute(widget: MainScreen(check: true)));
               } else {
                 Fluttertoast.showToast(
                     msg:
@@ -136,8 +136,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             }
           }
         } else {
-          if (phoneNumber != null && phonepass != null) {
-            var response = await Auth.signIn2(phoneNumber, phonepass);
+          if (phoneNumber != null && myPassword != null) {
+            var response = await Auth.signIn2(phoneNumber, myPassword);
             if (response.statusCode == 200) {
               var data = jsonDecode(utf8.decode(response.bodyBytes));
               Provider.of<UserModel>(context, listen: false).userSignIn(data);

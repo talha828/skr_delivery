@@ -2,16 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:skr_delivery/ApiCode/online_database.dart';
-
 import 'package:skr_delivery/model/customerModel.dart';
+import 'package:skr_delivery/model/user_model.dart';
+
 import 'package:skr_delivery/screens/child_lock/security_screen.dart';
-import 'package:skr_delivery/screens/loginScreen/passwordScreen/loader.dart';
 import 'package:skr_delivery/screens/widget/common.dart';
 import 'package:skr_delivery/screens/widget/constant.dart';
+
 
 class PaymentPin extends StatefulWidget {
   String pin;
@@ -106,6 +109,7 @@ class _PaymentPinState extends State<PaymentPin> {
 
   @override
   Widget build(BuildContext context) {
+    var userData=Provider.of<UserModel>(context);
     var media=MediaQuery.of(context).size;
     double height=media.height;
 
@@ -125,7 +129,7 @@ class _PaymentPinState extends State<PaymentPin> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              VariableText(text: name1,
+                              VariableText(text: widget.userName,
                                 fontsize: height * 0.020,
                                 textAlign: TextAlign.start,
                                 line_spacing: 1,
@@ -137,7 +141,7 @@ class _PaymentPinState extends State<PaymentPin> {
                                 textAlign: TextAlign.start,
                                 line_spacing: 1,
                                 fontcolor: textcolorblack,
-                                ),
+                              ),
                               SizedBox(height: height*0.01),
                             ],),
                           Container(child: VariableText(text: number1,
@@ -145,7 +149,7 @@ class _PaymentPinState extends State<PaymentPin> {
                             textAlign: TextAlign.start,
                             line_spacing: 1,
                             fontcolor: textcolorblack,
-                            ),)
+                          ),)
                         ],),
                       Spacer(),
                       VariableText(text: "Enter the 4-digit code sent to",
@@ -175,13 +179,16 @@ class _PaymentPinState extends State<PaymentPin> {
                         ],
                       ),
                       SizedBox(height: height*0.05),
-                      LoginButton(text: "Verify",onTap: (){
+                      LoginButton(text: "Verify",onTap: ()async{
                         print(enteredPin);
                         print(code);
                         if(enteredPin.toString() == code.toString()){
-                          Navigator.of(context).pop();
-                          widget.onSuccess();
+                          // Navigator.of(context).pop();
+                          setLoading(true);
+                          await widget.onSuccess();
+
                         }else{
+                          setLoading(false);
                           Fluttertoast.showToast(
                               msg: "Incorrect pin",
                               toastLength: Toast.LENGTH_SHORT);
@@ -195,19 +202,31 @@ class _PaymentPinState extends State<PaymentPin> {
                             onTap: ()async{
                               if(_start==0){
                                 setLoading(true);
-                                String msgPin = '';
-                                var rng = Random();
-                                for (var i = 0; i < 4; i++) {
-                                  msgPin += rng.nextInt(9).toString();
-                                }
-                                print(msgPin);
-                                String msgData='Use $msgPin  to confirm Rs  ${widget.total} to ${widget.userName} %26 Download app https://bit.ly/38uffP8';
-                                msgData+= ' ID: ${number1} Pass: 555 or Call 03330133520';
-                                var response = await OnlineDataBase.sendText(number1, msgData);
-                                if(response.statusCode == 200){
+                                // String msgPin = '';
+                                // var rng = Random();
+                                // for (var i = 0; i < 4; i++) {
+                                //   msgPin += rng.nextInt(9).toString();
+                                // }
+                                // print(msgPin);
+                                // String msgData='Use $msgPin  to confirm Rs  ${widget.total} to ${widget.userName} %26 Download app https://bit.ly/38uffP8';
+                                // msgData+= ' ID: ${number1} Pass: 555 or Call 03330133520';
+                                // var response = await OnlineDataBase.sendText(number1, msgData);
+                                var dio = new Dio();
+                                String url = "https://erp.suqexpress.com/api/getcode";
+                                Map<String, dynamic> map = {
+                                  "purpose": 1,
+                                  "number": number1.toString(),
+                                  "customer_id":widget.customer.customerCode,
+                                  "emp_name": userData.userName,
+                                };
+                                FormData formData = FormData.fromMap(map);
+                                //TODO sms post
+                                Response smsResponse =
+                                await dio.post(url, data: formData);
+                                if(smsResponse.statusCode == 200){
                                   _start=60;
                                   setState(() {
-                                    code=msgPin.toString();
+                                    code=smsResponse.data["code"].toString();
                                   });
                                   startTimer();
                                 }
@@ -230,7 +249,7 @@ class _PaymentPinState extends State<PaymentPin> {
                                   textAlign: TextAlign.start,
                                   line_spacing: 1,
                                   fontcolor: _start==0?Colors.white:textcolorblack,
-                                  ),
+                              ),
                             ),
                           ),
                           IconButton(onPressed: ()=>getUser(), icon:Icon(Icons.refresh,color: themeColor1,))
@@ -240,19 +259,31 @@ class _PaymentPinState extends State<PaymentPin> {
                         onTap: ()async{
                           if(_start==0 && number2!="NULL" && double.parse(number2) > 1){
                             setLoading(true);
-                            String msgPin = '';
-                            var rng = Random();
-                            for (var i = 0; i < 4; i++) {
-                              msgPin += rng.nextInt(9).toString();
-                            }
-                            print(msgPin);
-                            String msgData='Use $msgPin  to confirm Rs  ${widget.total} to ${widget.userName} %26 Download app https://bit.ly/38uffP8';
-                            msgData+= ' ID: ${number2} Pass: 555 or Call 03330133520';
-                            var response = await OnlineDataBase.sendText(number2, msgData);
-                            if(response.statusCode == 200){
+                            // String msgPin = '';
+                            // var rng = Random();
+                            // for (var i = 0; i < 4; i++) {
+                            //   msgPin += rng.nextInt(9).toString();
+                            // }
+                            // print(msgPin);
+                            // String msgData='Use $msgPin  to confirm Rs  ${widget.total} to ${widget.userName} %26 Download app https://bit.ly/38uffP8';
+                            // msgData+= ' ID: ${number2} Pass: 555 or Call 03330133520';
+                            // var response = await OnlineDataBase.sendText(number2, msgData);
+                            var dio = new Dio();
+                            String url = "https://erp.suqexpress.com/api/getcode";
+                            Map<String, dynamic> map = {
+                              "purpose": 1,
+                              "number": number2.toString(),
+                              "customer_id":widget.customer.customerCode,
+                              "emp_name": userData.userName,
+                            };
+                            FormData formData = FormData.fromMap(map);
+                            //TODO sms post
+                            Response smsResponse =
+                            await dio.post(url, data: formData);
+                            if(smsResponse.statusCode == 200){
                               _start=60;
                               setState(() {
-                                code=msgPin.toString();
+                                code=smsResponse.data["code"].toString();
                               });
                               startTimer();
                             }
@@ -264,7 +295,7 @@ class _PaymentPinState extends State<PaymentPin> {
                           }
                           else{
                             Fluttertoast.showToast(
-                                msg: "Error: " +e.toString(),
+                                msg: "Something went wrong",
                                 toastLength: Toast.LENGTH_SHORT);
                           }
                           setLoading(false);
@@ -292,16 +323,19 @@ class _PaymentPinState extends State<PaymentPin> {
                                           textAlign: TextAlign.center,
                                           fontsize: 15,
                                           fontcolor: themeColor2,
+
                                         ),
                                         VariableText(
                                           text: number2.toString()== "NULL" || number2.toString()== 1.toString()?"":number2.toString(),
                                           textAlign: TextAlign.center,
                                           fontsize: 15,
                                           fontcolor: themeColor2,
+
                                         ),
                                       ],),
                                     Spacer(),
                                     Icon(Icons.arrow_forward,color: Colors.white,)
+
                                   ],
                                 ),
                               ],
@@ -314,19 +348,31 @@ class _PaymentPinState extends State<PaymentPin> {
                         onTap: ()async{
                           if(_start==0 && number3!="NULL" && number3 != 1.toString){
                             setLoading(true);
-                            String msgPin = '';
-                            var rng = Random();
-                            for (var i = 0; i < 4; i++) {
-                              msgPin += rng.nextInt(9).toString();
-                            }
-                            print(msgPin);
-                            String msgData='Use $msgPin  to confirm Rs  ${widget.total} to ${widget.userName} %26 Download app https://bit.ly/38uffP8';
-                            msgData+= ' ID: ${number3} Pass: 555 or Call 03330133520';
-                            var response = await OnlineDataBase.sendText(number3, msgData);
-                            if(response.statusCode == 200){
+                            // String msgPin = '';
+                            // var rng = Random();
+                            // for (var i = 0; i < 4; i++) {
+                            //   msgPin += rng.nextInt(9).toString();
+                            // }
+                            // print(msgPin);
+                            // String msgData='Use $msgPin  to confirm Rs  ${widget.total} to ${widget.userName} %26 Download app https://bit.ly/38uffP8';
+                            // msgData+= ' ID: ${number3} Pass: 555 or Call 03330133520';
+                            // var response = await OnlineDataBase.sendText(number3, msgData);
+                            var dio = new Dio();
+                            String url = "https://erp.suqexpress.com/api/getcode";
+                            Map<String, dynamic> map = {
+                              "purpose": 1,
+                              "number": number2.toString(),
+                              "customer_id":widget.customer.customerCode,
+                              "emp_name": userData.userName,
+                            };
+                            FormData formData = FormData.fromMap(map);
+                            //TODO sms post
+                            Response smsResponse =
+                            await dio.post(url, data: formData);
+                            if(smsResponse.statusCode == 200){
                               _start=60;
                               setState(() {
-                                code=msgPin.toString();
+                                code=smsResponse.data["code"].toString();
                               });
                               startTimer();
                             }
@@ -366,12 +412,14 @@ class _PaymentPinState extends State<PaymentPin> {
                                           textAlign: TextAlign.center,
                                           fontsize: 15,
                                           fontcolor: themeColor2,
+
                                         ),
                                         VariableText(
                                           text: number3.toString()== "NULL" ||number3.toString()== 1.toString()?"":number3.toString(),
                                           textAlign: TextAlign.center,
                                           fontsize: 15,
                                           fontcolor: themeColor2,
+
                                         ),
                                       ],),
                                     Spacer(),
@@ -385,7 +433,7 @@ class _PaymentPinState extends State<PaymentPin> {
                       ),
                     ],),
                 ),
-                isLoading ? Positioned.fill(child: loader()) : Container(),
+                isLoading ? Positioned.fill(child: ProcessLoading()) : Container(),
               ],
             )));
   }

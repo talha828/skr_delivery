@@ -27,7 +27,7 @@ class _SucessFullyDelieveredOrderScreenState extends State<SucessFullyDelievered
   }
   Future<bool> _onWillPop(){
     // Navigator.push(context, MaterialPageRoute(builder: (_)=>CheckInScreen(shopDetails: widget.shopDetails,lat: widget.lat,long: widget.long,fromShop: true,)));
-    return   Navigator.push(context, MaterialPageRoute(builder: (_)=>MainScreen()));
+    return   Navigator.push(context, MaterialPageRoute(builder: (_)=>MainScreen(check: false,)));
   }
 
   @override
@@ -51,7 +51,7 @@ class _SucessFullyDelieveredOrderScreenState extends State<SucessFullyDelievered
                   Spacer(),
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (_)=>CheckIn(customerData: widget.shopDetails,code: widget.shopDetails.code,name: widget.shopDetails.shopName,image: "No Image",)));
+                      Navigator.push(context, MaterialPageRoute(builder: (_)=>CheckIn(customerData: widget.shopDetails)));
                       },
                     child: Image.asset(
                       "assets/icons/cross.png",
@@ -103,7 +103,7 @@ class _SucessFullyDelieveredOrderScreenState extends State<SucessFullyDelievered
                 height: height * 0.02,),
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=>MainScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>MainScreen(check: false,)));
                 },
                 child: Center(
                   child: Container(
