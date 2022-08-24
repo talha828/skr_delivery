@@ -982,12 +982,12 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                   SizedBox(height: height * 0.015),
                   InkWell(
                     onTap: () async {
-                      var location = await Location().getLocation();
                       if (!isLoading2) {
                         try {
                           setState(() {
                             isLoading2 = true;
                           });
+                      var location = await Location().getLocation();
                           List<String> tempContact = [];
                           final userData =
                               Provider.of<UserModel>(context, listen: false);
@@ -1019,7 +1019,12 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           FormData formData = FormData.fromMap(map);
                           //TODO sms post
                           Response smsResponse =
-                              await dio.post(url, data: formData);
+                              await dio.post(url, data: formData).catchError((e){
+                                print("hello: "+e.response.data['message'].toString());
+                          Fluttertoast.showToast(
+                              msg: e.response.data['message'].toString(),
+                              toastLength: Toast.LENGTH_SHORT);
+                              });
                           if (smsResponse.statusCode == 200) {
                             setState(() {
                               isLoading2 = false;
@@ -1068,12 +1073,13 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                         });
                                         setLoading(false);
                                         Navigator.pop(context);
+                                        print( e.response.data["message"].toString());
                                         AwesomeDialog(
                                           context: context,
                                           dialogType: DialogType.ERROR,
                                           animType: AnimType.BOTTOMSLIDE,
                                           title: "Something went wrong",
-                                          desc: "Error: " + e.toString(),
+                                          desc: "Error: " + e.response.data["message"].toString(),
                                           btnCancelText: "Ok",
                                           dismissOnTouchOutside: false,
                                           btnOkOnPress: () {},
@@ -1120,7 +1126,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           });
                           print('exception is: ' + e.toString());
                           Fluttertoast.showToast(
-                              msg: "Something went wrong, Try again later",
+                              msg: e.response.toString(),
                               toastLength: Toast.LENGTH_SHORT,
                               backgroundColor: Colors.black87,
                               textColor: Colors.white,
@@ -1589,10 +1595,12 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                   borderRadius: BorderRadius.circular(5),
                   child: LayoutBuilder(
                     builder: (_, constraints) => Image.network(
+                      widget.long.toString()
                         // imageurl.toString() == "No Image" || imageurl == null ?
-                        "https://i.stack.imgur.com/y9DpT.jpg"
+                       // "https://i.stack.imgur.com/y9DpT.jpg"
                         //  : imageurl.split('{"')[1].split('"}')[0],
                         ,
+                        errorBuilder: (context, url, error) => new Icon(Icons.person_add_alt),
                         fit: BoxFit.fill, loadingBuilder: (BuildContext context,
                             Widget child, ImageChunkEvent loadingProgress) {
                       if (loadingProgress == null) return child;

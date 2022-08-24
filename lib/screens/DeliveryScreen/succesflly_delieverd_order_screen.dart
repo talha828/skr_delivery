@@ -27,7 +27,7 @@ class _SucessFullyDelieveredOrderScreenState extends State<SucessFullyDelievered
   }
   Future<bool> _onWillPop(){
     // Navigator.push(context, MaterialPageRoute(builder: (_)=>CheckInScreen(shopDetails: widget.shopDetails,lat: widget.lat,long: widget.long,fromShop: true,)));
-    return   Navigator.push(context, MaterialPageRoute(builder: (_)=>MainScreen(check: false,)));
+    return   Navigator.push(context, MaterialPageRoute(builder: (_)=>MainScreen(check: true,)));
   }
 
   @override
@@ -103,7 +103,7 @@ class _SucessFullyDelieveredOrderScreenState extends State<SucessFullyDelievered
                 height: height * 0.02,),
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=>MainScreen(check: false,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>MainScreen(check: true,)));
                 },
                 child: Center(
                   child: Container(

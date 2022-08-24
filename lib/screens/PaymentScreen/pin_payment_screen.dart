@@ -129,7 +129,7 @@ class _PaymentPinState extends State<PaymentPin> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              VariableText(text: widget.userName,
+                              VariableText(text: widget.customer.customerName,
                                 fontsize: height * 0.020,
                                 textAlign: TextAlign.start,
                                 line_spacing: 1,
@@ -257,8 +257,8 @@ class _PaymentPinState extends State<PaymentPin> {
                       Spacer(),
                       InkWell(
                         onTap: ()async{
-                          if(_start==0 && number2!="NULL" && double.parse(number2) > 1){
                             setLoading(true);
+                          if(_start==0 && number2!="NULL" && double.parse(number2) > 1){
                             // String msgPin = '';
                             // var rng = Random();
                             // for (var i = 0; i < 4; i++) {
@@ -273,32 +273,41 @@ class _PaymentPinState extends State<PaymentPin> {
                             Map<String, dynamic> map = {
                               "purpose": 1,
                               "number": number2.toString(),
+                              "amount":widget.total,
                               "customer_id":widget.customer.customerCode,
                               "emp_name": userData.userName,
                             };
-                            FormData formData = FormData.fromMap(map);
+                            FormData formData = FormData. fromMap(map);
                             //TODO sms post
                             Response smsResponse =
-                            await dio.post(url, data: formData);
+                            await dio.post(url, data: formData).catchError((e){
+                              Fluttertoast.showToast(
+                                  msg: "Error: " +e.response.data["message"].toString(),
+                                  toastLength: Toast.LENGTH_SHORT);
+                              setLoading(false);
+                            });
                             if(smsResponse.statusCode == 200){
                               _start=60;
                               setState(() {
                                 code=smsResponse.data["code"].toString();
                               });
                               startTimer();
+                              setLoading(false);
                             }
                             else{
                               Fluttertoast.showToast(
                                   msg: "Code not sent, Try again",
                                   toastLength: Toast.LENGTH_SHORT);
+                              setLoading(false);
                             }
                           }
                           else{
                             Fluttertoast.showToast(
                                 msg: "Something went wrong",
                                 toastLength: Toast.LENGTH_SHORT);
+                            setLoading(false);
                           }
-                          setLoading(false);
+
                         },
                         child: Container(
                           decoration: BoxDecoration(

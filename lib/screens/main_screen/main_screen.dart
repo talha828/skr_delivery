@@ -376,7 +376,9 @@ class _MainScreenState extends State<MainScreen> {
                                   // enable: false,
                                 ),
                               ),
-                              IconButton(onPressed: ()=>getAllCustomerData(true), icon: Icon(Icons.refresh,color: themeColor1,)),
+                              IconButton(onPressed: (){
+                                startLocationService();
+                                getAllCustomerData(true);}, icon: Icon(Icons.refresh,color: themeColor1,)),
                               IconButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: (){
