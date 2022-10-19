@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:skr_delivery/model/customerList.dart';
 import 'package:skr_delivery/screens/splash_screen/splash_screen.dart';
 import 'package:skr_delivery/trmpFile.dart';
-
 import 'model/cart_model.dart';
 import 'model/retrun_cart_model.dart';
 import 'model/user_model.dart';

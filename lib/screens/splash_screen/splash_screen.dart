@@ -38,10 +38,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   static const int _duration = 2;
 
   getVersion() async {
-    Uri url = Uri.parse("https://erp.suqexpress.com/api/appversion/3");
-    var response = await http.get(url);
-    var data = jsonDecode(response.body);
-    if (data['data'] == "04072022") {
+    Uri url = Uri.parse("http://api.visionsoft-pk.com:8181/ords/skr2/app/getappvrs?pin_cmp=20&pin_kp=A&pin_keyword1=6731&pin_keyword2=U09Z&pin_userid=+923002233297&pin_password=123&pin_appname=DELIVERY");
+    var versionResponse = await http.get(url);
+    var versionDecode = jsonDecode(utf8.decode(versionResponse.bodyBytes));
+    var version = versionDecode['results'][0]['VERSION'];
+    if (version.toString() == "151022") {
       checkIntetrnetConnectivtiy();
     } else {
       AwesomeDialog(
