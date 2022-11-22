@@ -15,7 +15,7 @@ class _TempState extends State<Temp> {
     // List name=["RIAZ AUTOS","BILAL AUTOS METRO WEEL","USMANI AUTOS BILAL COLONY"];
     // List owner_name=["RIAZURREHMAN","IQBAL","USMANI"];
     for(var i=0;i<num.length;i++){
-      Uri url=Uri.parse("http://124.29.202.191:8181/ords/skr2/app/posteditshop?pin_cmp=20&pin_kp=A&pin_keyword1=X09&pin_keyword2=912&pin_userid=+923340243440&pin_password=8888&pin_cust_code=${cus_code[i]}&pin_phone1=${num[i]}");
+      Uri url=Uri.parse("http://124.29.202.191:8181/ords/skr2/app/posteditshop?pin_cmp=20&pin_kp=A&pin_keyword1=6731&pin_keyword2=U09Z&pin_userid=+923340243440&pin_password=8888&pin_cust_code=${cus_code[i]}&pin_phone1=${num[i]}");
       var response=await http.post(url);
       print(response.body);
       print(i);

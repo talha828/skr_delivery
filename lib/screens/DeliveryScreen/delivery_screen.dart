@@ -1053,18 +1053,18 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                       //             .shopDetails.customerCode);
 
                                       var response = await OnlineDataBase
-                                              .newpostBoxDeliverDetails(
+                                              .postBoxDeliverDetails(
                                                   boxDetails: boxDetails,
-                                                  emp_id: userData.userID,
-                                                  emp_name: userData.userName,
+                                                  //emp_id: userData.userID,
+                                                  //emp_name: userData.userName,
                                                   lat: location.latitude
                                                       .toString(),
-                                                  code_id:
-                                                      smsResponse.data["id"],
+                                                  //code_id:
+                                                      //smsResponse.data["id"],
                                                   long: location.longitude
                                                       .toString(),
-                                                  amount:
-                                                      boxDetails.totalAmount,
+                                                  //amount:
+                                                      //boxDetails.totalAmount,
                                                   customerCode: widget
                                                       .shopDetails.customerCode)
                                           .catchError((e) {

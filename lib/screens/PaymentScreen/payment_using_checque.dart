@@ -632,11 +632,13 @@ class _PaymentUsingCheckState extends State<PaymentUsingCheck> {
     try {
       var location =await Location().getLocation();
       setLoading(true);
-      var response = await OnlineDataBase.newpostPayment(emp_id: userdata.userEmpolyeeNumber,customerCode: widget.customerData.customerCode, imageUrl: imageUrl,lat: location.latitude.toString(),long: location.longitude.toString(),amount: amount.text,name: name.text,checkNumber: checkNumber.text,paymentMode: '2', date: startDate);
+      var response = await OnlineDataBase.postPayment(
+          //emp_id: userdata.userEmpolyeeNumber,
+          customerCode: widget.customerData.customerCode, imageUrl: imageUrl,lat: location.latitude.toString(),long: location.longitude.toString(),amount: amount.text,name: name.text,checkNumber: checkNumber.text,paymentMode: '2', date: startDate);
       print("status code is: " + response.statusCode.toString());
       if (response.statusCode == 200) {
-        // var respnseData=jsonDecode(utf8.decode(response.bodyBytes));
-        // print("response is: "+respnseData['results'].toString());
+        var respnseData=jsonDecode(utf8.decode(response.bodyBytes));
+        print("response is: "+respnseData['results'].toString());
         setLoading(false);
         Fluttertoast.showToast(
             msg: "Payment Created Successfully",

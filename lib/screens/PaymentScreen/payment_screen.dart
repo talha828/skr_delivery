@@ -411,11 +411,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
     try {
       var location=await Location().getLocation();
       setLoading(true);
-      var response = await OnlineDataBase.newpostPayment(emp_id: user.userID,customerCode: customer.customerCode,lat: location.latitude.toString(),long: location.longitude.toString(),amount: totalAmount,name: Name,paymentMode: '1');
+      var response = await OnlineDataBase.postPayment(
+          //emp_id: user.userID,
+          customerCode: customer.customerCode,lat: location.latitude.toString(),long: location.longitude.toString(),amount: totalAmount,name: Name,paymentMode: '1');
       print("status code is" + response.statusCode.toString());
       if (response.statusCode == 200) {
-        // var respnseData=jsonDecode(utf8.decode(response.bodyBytes));
-        // print("response is"+respnseData['results'].toString());
+        var respnseData=jsonDecode(utf8.decode(response.bodyBytes));
+        print("response is"+respnseData['results'].toString());
 
         List<String> tempContact = [];
         if(customer.customerContactNumber != null){

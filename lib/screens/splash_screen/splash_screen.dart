@@ -10,6 +10,7 @@ import 'package:location/location.dart' as loc;
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skr_delivery/screens/getStartScreen/get_start_screen.dart';
 import 'package:skr_delivery/screens/child_lock/security_screen.dart';
@@ -42,20 +43,21 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     var versionResponse = await http.get(url);
     var versionDecode = jsonDecode(utf8.decode(versionResponse.bodyBytes));
     var version = versionDecode['results'][0]['VERSION'];
-    if (version.toString() == "151022") {
-      checkIntetrnetConnectivtiy();
+    if (version.toString() == "221122"){
+      openLocationFirst();
     } else {
       AwesomeDialog(
           context: context,
           dialogType: DialogType.INFO_REVERSED,
           animType: AnimType.BOTTOMSLIDE,
-          title: "Up-date your app",
+          title: "Update your app",
           desc:
           "New version is available on play store. Please update your app",
           btnOkText: "Update Now",
           btnCancelText: "Ok",
           dismissOnBackKeyPress: false,
           dismissOnTouchOutside: false,
+          btnOkColor: Colors.blue,
           btnOkOnPress: () async {
             getVersion();
           }).show();
@@ -162,7 +164,46 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     });
     _controller.forward();
   }
-
+  openLocationFirst()async{
+    Location location = new Location();
+    bool  _serviceEnabled = await location.serviceEnabled();
+    if(!_serviceEnabled){
+      Alert(
+        context: context,
+        type: AlertType.info,
+        title: "Please Enable your Location",
+        desc: "Your Location is not available",
+        style: AlertStyle(
+            descStyle: TextStyle(fontSize: 15,fontWeight: FontWeight.normal)
+        ),
+        buttons: [
+          DialogButton(
+            color: themeColor1,
+            child: Text(
+              "Enable Now",
+              style: TextStyle(color: Colors.white, fontSize:15,fontWeight: FontWeight.bold),
+            ),
+            onPressed: ()async{
+              _serviceEnabled = await location.requestService();
+              var _permissionGranted = await location.hasPermission();
+              if (_permissionGranted == loc.PermissionStatus.denied) {
+                _permissionGranted = await location.requestPermission();
+                if (_permissionGranted != loc.PermissionStatus.granted) {
+                  checkIntetrnetConnectivtiy();
+                }
+              }
+              else if(_permissionGranted == loc.PermissionStatus.granted){
+                checkIntetrnetConnectivtiy();
+              }
+            },
+            width: 120,
+          )
+        ],
+      ).show();
+    }
+    else{
+      checkIntetrnetConnectivtiy();    }
+  }
   dispose() {
     _controller.dispose(); // you need this
     super.dispose();

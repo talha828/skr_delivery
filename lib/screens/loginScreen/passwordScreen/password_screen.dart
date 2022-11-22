@@ -128,12 +128,13 @@ class _PasswordScreenState extends State<PasswordScreen> {
         setState(() {
           loading = false;
         });
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+            var error=data['results'][0]['A'];
         Fluttertoast.showToast(
-            msg: "Somethings went wrong",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            msg: "Error: "+error.toString(),
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0);
       }

@@ -1,4 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.skr_delivery">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
@@ -10,8 +12,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
    <application
+       tools:replace="android:icon"
         android:label="SUQ - DELIVERY"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher_foreground">
         <activity
             android:name=".MainActivity"
             android:exported="true"
