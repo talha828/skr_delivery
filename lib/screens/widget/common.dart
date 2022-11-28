@@ -898,7 +898,7 @@ class _CustomShopContainerState extends State<CustomShopContainer> {
                                       widget.showLoading(false);
                                       //checkAndGetLocation();
                                     } else {
-                                      if(widget.customerData.shopAssigned.toString()=="Yes"){
+                                      if("Yes"=="Yes"){
                                         Location location = new Location();
                                         var _location = await location.getLocation();
                                         await PostEmployeeVisit(
@@ -911,7 +911,7 @@ class _CustomShopContainerState extends State<CustomShopContainer> {
                                       }
                                       widget.showLoading(false);
 
-                                      // if(widget.customerData.shopAssigned == 'Yes'){
+                                      // if('Yes' == 'Yes'){
                                       //   if (double.parse(userData.usercashReceive) >=
                                       //       double.parse(userData.usercashLimit)
                                       //   // || double.parse(userData.usercashReceive) < 0
@@ -993,7 +993,7 @@ class _CustomShopContainerState extends State<CustomShopContainer> {
                                           border: Border.all(
                                               color: index == 0 ?
                                               themeColor1
-                                                  : widget.customerData.shopAssigned == 'Yes' ? themeColor1 : Colors.grey[400]
+                                                  : 'Yes' == 'Yes' ? themeColor1 : Colors.grey[400]
                                           )),
                                       child: Center(
                                         child: VariableText(
@@ -1001,7 +1001,7 @@ class _CustomShopContainerState extends State<CustomShopContainer> {
                                           fontsize: 11,
                                           fontcolor: index == 0
                                               ? themeColor2
-                                              : widget.customerData.shopAssigned == 'Yes' ? themeColor1 : Colors.grey[400],
+                                              : 'Yes' == 'Yes' ? themeColor1 : Colors.grey[400],
                                           weight: FontWeight.w700,
                                         ),
                                       ),

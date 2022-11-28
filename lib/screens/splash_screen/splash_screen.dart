@@ -43,14 +43,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     var versionResponse = await http.get(url);
     var versionDecode = jsonDecode(utf8.decode(versionResponse.bodyBytes));
     var version = versionDecode['results'][0]['VERSION'];
-    if (version.toString() == "221122"){
+    if (version.toString() == "281122"){
       openLocationFirst();
     } else {
       AwesomeDialog(
           context: context,
           dialogType: DialogType.INFO_REVERSED,
           animType: AnimType.BOTTOMSLIDE,
-          title: "Update your app",
+          title: "Update Available",
           desc:
           "New version is available on play store. Please update your app",
           btnOkText: "Update Now",

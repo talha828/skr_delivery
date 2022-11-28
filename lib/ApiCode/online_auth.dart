@@ -6,7 +6,7 @@ class Auth{
   static Future<dynamic> signIn2(String phoneno,String password) async {
     var url=Uri.parse(directory+'getlogin?pin_cmp=20&pin_kp=A&pin_keyword1=6731&pin_keyword2=U09Z&pin_userid=$phoneno&pin_password=$password&pin_version_check=N');
     final response = await http.get(url);
-    print(url);
+    print(url.toString());
     return response;
   }
   static Future<dynamic> forgetPassword(String phoneno,String newpassword) async {
