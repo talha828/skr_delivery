@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     var versionResponse = await http.get(url);
     var versionDecode = jsonDecode(utf8.decode(versionResponse.bodyBytes));
     var version = versionDecode['results'][0]['VERSION'];
-    if (version.toString() == "281122"){
+    if (version.toString() == "301122"){
       openLocationFirst();
     } else {
       AwesomeDialog(

@@ -983,23 +983,23 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                   InkWell(
                     onTap: () async {
                       if (!isLoading2) {
-                        try {
+                        // try {
                           setState(() {
                             isLoading2 = true;
                           });
                       var location = await Location().getLocation();
-                          List<String> tempContact = [];
+                          // List<String> tempContact = [];
                           final userData =
                               Provider.of<UserModel>(context, listen: false);
-                          if (widget.shopDetails.customerContactNumber !=
-                              null) {
-                            tempContact.add(widget
-                                .shopDetails.customerContactNumber
-                                .substring(
-                                    0,
-                                    widget.shopDetails.customerContactNumber
-                                        .length));
-                          }
+                          // if (widget.shopDetails.customerContactNumber !=
+                          //     null) {
+                          //   tempContact.add(widget
+                          //       .shopDetails.customerContactNumber
+                          //       .substring(
+                          //           0,
+                          //           widget.shopDetails.customerContactNumber
+                          //               .length));
+                          // }
                           // if (widget.shopDetails.customerContactNumber2 !=
                           //     null) {
                           //   tempContact
@@ -1007,42 +1007,42 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           // } else {
                           //   //tempContact.add('+923340243440');
                           // }
-                          var dio = new Dio();
-                          String url = "https://erp.suqexpress.com/api/getcode";
-                          Map<String, dynamic> map = {
-                            "purpose": 1,
-                            "number": tempContact.first,
-                            "amount":boxDetails.totalAmount,
-                            "customer_id": widget.shopDetails.customerCode,
-                            "emp_name": userData.userName,
-                          };
-                          FormData formData = FormData.fromMap(map);
-                          //TODO sms post
-                          Response smsResponse =
-                              await dio.post(url, data: formData).catchError((e){
-                                print("hello: "+e.response.data['message'].toString());
-                          Fluttertoast.showToast(
-                              msg: e.response.data['message'].toString(),
-                              toastLength: Toast.LENGTH_SHORT);
-                              });
-                          if (smsResponse.statusCode == 200) {
-                            setState(() {
-                              isLoading2 = false;
-                            });
-                            print(smsResponse.data.toString());
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => PaymentPin(
-                                    userName: userData.userName,
-                                    customer: widget.shopDetails,
-                                    total: boxDetails.totalAmount,
-                                    pin: smsResponse.data["code"].toString(),
-                                    contactNumbers: tempContact,
-                                    onSuccess: () async {
-                                      setState(() {
-                                        isLoading2 = true;
-                                      });
+                          // var dio = new Dio();
+                          // String url = "https://erp.suqexpress.com/api/getcode";
+                          // Map<String, dynamic> map = {
+                          //   "purpose": 1,
+                          //   "number": tempContact.first,
+                          //   "amount":boxDetails.totalAmount,
+                          //   "customer_id": widget.shopDetails.customerCode,
+                          //   "emp_name": userData.userName,
+                          // };
+                          // FormData formData = FormData.fromMap(map);
+                          // //TODO sms post
+                          // Response smsResponse =
+                          //     await dio.post(url, data: formData).catchError((e){
+                          //       print("hello: "+e.response.data['message'].toString());
+                          // Fluttertoast.showToast(
+                          //     msg: e.response.data['message'].toString(),
+                          //     toastLength: Toast.LENGTH_SHORT);
+                          //     });
+                         // if (smsResponse.statusCode == 200) {
+                         //    setState(() {
+                         //      isLoading2 = false;
+                         //    });
+                            //print(smsResponse.data.toString());
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (_) => PaymentPin(
+                            //         userName: userData.userName,
+                            //         customer: widget.shopDetails,
+                            //         total: boxDetails.totalAmount,
+                            //         pin: smsResponse.data["code"].toString(),
+                            //         contactNumbers: tempContact,
+                            //         onSuccess: () async {
+                            //           setState(() {
+                            //             isLoading2 = true;
+                            //           });
                                       //
                                       // var response = await OnlineDataBase
                                       //     .postBoxDeliverDetails(
@@ -1073,13 +1073,13 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                         });
                                         setLoading(false);
                                         Navigator.pop(context);
-                                        print( e.response.data["message"].toString());
+                                       // print( e.response.data["message"].toString());
                                         AwesomeDialog(
                                           context: context,
                                           dialogType: DialogType.ERROR,
                                           animType: AnimType.BOTTOMSLIDE,
                                           title: "Something went wrong",
-                                          desc: "Error: " + e.response.data["message"].toString(),
+                                          desc: "Error: "+ e.toString(),
                                           btnCancelText: "Ok",
                                           dismissOnTouchOutside: false,
                                           btnOkOnPress: () {},
@@ -1109,29 +1109,29 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                                     SucessFullyDelieveredOrderScreen()));
                                       }
                                       //setLoading(false);
-                                    },
-                                  ),
-                                ));
-                          } else {
-                            setState(() {
-                              isLoading2 = false;
-                            });
-                            Fluttertoast.showToast(
-                                msg: "Code not sent, Try again",
-                                toastLength: Toast.LENGTH_SHORT);
-                          }
-                        } catch (e, stack) {
-                          setState(() {
-                            isLoading2 = false;
-                          });
-                          print('exception is: ' + e.toString());
-                          Fluttertoast.showToast(
-                              msg: e.response.toString(),
-                              toastLength: Toast.LENGTH_SHORT,
-                              backgroundColor: Colors.black87,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }
+                                     // },
+                                //   ),
+                                // ));
+                        //   } else {
+                        //     setState(() {
+                        //       isLoading2 = false;
+                        //     });
+                        //     Fluttertoast.showToast(
+                        //         msg: "Code not sent, Try again",
+                        //         toastLength: Toast.LENGTH_SHORT);
+                        //   }
+                        // } catch (e, stack) {
+                        //   setState(() {
+                        //     isLoading2 = false;
+                        //   });
+                        //   print('exception is: ' + e.toString());
+                        //   Fluttertoast.showToast(
+                        //       msg: e.response.toString(),
+                        //       toastLength: Toast.LENGTH_SHORT,
+                        //       backgroundColor: Colors.black87,
+                        //       textColor: Colors.white,
+                        //       fontSize: 16.0);
+                        // }
                       }
                     },
                     child: Container(
